@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>台灣「日常觀察 × 反諷好笑」圖文插畫家清單</title>
+<style>
+  :root {
+    --bg: #faf7f2;
+    --card: #ffffff;
+    --ink: #1f1d1a;
+    --muted: #6e6a64;
+    --line: #e8e3da;
+    --accent: #c8553d;
+    --gold: #d4a017;
+    --silver: #a8a299;
+    --bronze: #b87333;
+    --tier-c: #88a5a8;
+    --highlight: #fff4e6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  header {
+    text-align: center;
+    padding: 24px 0 40px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 40px;
+  }
+  header h1 {
+    font-size: 30px;
+    margin: 0 0 8px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  header .sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0;
+  }
+  header .meta {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 12px;
+    font-style: italic;
+  }
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 40px;
+  }
+  .toc-title {
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: var(--muted);
+  }
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+  }
+  .toc a {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 14px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: block;
+    transition: background 0.15s;
+  }
+  .toc a:hover {
+    background: var(--highlight);
+  }
+  .tier {
+    margin-bottom: 56px;
+  }
+  .tier-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .tier-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 56px;
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 16px;
+    font-weight: 800;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+  .tier-s .tier-badge { background: var(--accent); }
+  .tier-a .tier-badge { background: var(--gold); }
+  .tier-b .tier-badge { background: var(--bronze); }
+  .tier-c .tier-badge { background: var(--tier-c); }
+  .tier-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0;
+  }
+  .tier-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-left: auto;
+    font-style: italic;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(31, 29, 26, 0.06);
+  }
+  .card-name {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+  .card-style {
+    font-size: 13px;
+    color: var(--accent);
+    margin: 0 0 10px;
+    font-weight: 600;
+  }
+  .card-desc {
+    font-size: 14px;
+    color: var(--ink);
+    margin: 0 0 10px;
+    line-height: 1.6;
+  }
+  .stars {
+    color: var(--gold);
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .card-link {
+    display: inline-block;
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-right: 6px;
+    margin-top: 4px;
+  }
+  .card-link:hover {
+    background: var(--highlight);
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    background: var(--card);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .table th, .table td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+  }
+  .table th {
+    background: var(--highlight);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+  .table tr:last-child td { border-bottom: none; }
+  .recommend {
+    margin-top: 56px;
+    padding: 32px;
+    background: linear-gradient(135deg, #fff4e6 0%, #fff 100%);
+    border-radius: 12px;
+    border: 1px solid var(--line);
+  }
+  .recommend h2 {
+    margin: 0 0 8px;
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .recommend .sub {
+    color: var(--muted);
+    margin: 0 0 24px;
+    font-size: 14px;
+  }
+  .reco-block {
+    margin-top: 20px;
+  }
+  .reco-block h3 {
+    font-size: 16px;
+    margin: 0 0 12px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .reco-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .reco-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+    vertical-align: top;
+  }
+  .reco-table tr:last-child td { border-bottom: none; }
+  .reco-table .medal {
+    width: 50px;
+    font-size: 18px;
+  }
+  .reco-table .who {
+    width: 130px;
+    font-weight: 700;
+  }
+  footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  footer a { color: var(--muted); text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    .container { padding: 24px 16px 60px; }
+    header h1 { font-size: 24px; }
+    .grid { grid-template-columns: 1fr; }
+    .tier-header { flex-wrap: wrap; }
+    .tier-desc { margin-left: 0; width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🎨 台灣「日常觀察 × 反諷好笑」圖文插畫家</h1>
+    <p class="sub">給品牌、企劃、選 KOL 用的口袋名單</p>
+    <p class="meta">整理時間：2026 / 5 / 14　·　按反諷強度與日常觀察力分四級</p>
+  </header>
+
+  <nav class="toc">
+    <div class="toc-title">目錄</div>
+    <ul>
+      <li><a href="#tier-s">🔥 Tier S：強反諷 × 黑色幽默 × 時事</a></li>
+      <li><a href="#tier-a">🥈 Tier A：上班族厭世 × 反諷</a></li>
+      <li><a href="#tier-b">🥉 Tier B：日常觀察 × 反諷</a></li>
+      <li><a href="#tier-c">🎀 Tier C：日常萌系（備援）</a></li>
+      <li><a href="#recommend">🎯 篩選建議</a></li>
+    </ul>
+  </nav>
+
+  <!-- TIER S -->
+  <section id="tier-s" class="tier tier-s">
+    <div class="tier-header">
+      <span class="tier-badge">Tier S</span>
+      <h2 class="tier-title">強反諷 × 黑色幽默 × 社會時事</h2>
+      <span class="tier-desc">最對位「反諷」需求</span>
+    </div>
+    <div class="grid">
+
+      <div class="card">
+        <h3 class="card-name">厭世姬</h3>
+        <p class="card-style">圖文界招牌厭世派</p>
+        <p class="card-desc">反諷小至個人雜感、大至社會議題與公共議題。天下雜誌專訪定位為「精準的厭世感」。</p>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <a class="card-link" href="https://www.cw.com.tw/article/5085222" target="_blank" rel="noopener">天下專訪</a>
+      </div>
+
+      <div class="card">
+        <h3 class="card-name">霸軒 BAXUAN</h3>
+        <p class="card-style">黑色幽默反諷時事</p>
+        <p class="card-desc">「人類超有病」系列，靠臉部多樣表情（不屑、挑釁、無奈）戳人心。Threads 25 萬粉。</p>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <a class="card-link" href="https://www.threads.com/@baxuan_ig" target="_blank" rel="noopener">Threads</a>
+        <a class="card-link" href="https://www.facebook.com/baxuan.mei/" target="_blank" rel="noopener">Facebook</a>
+      </div>
+
+      <div class="card">
+        <h3 class="card-name">消極男子（消極の男子）</h3>
+        <p class="card-style">圖文界太宰治</p>
+        <p class="card-desc">圓眼+生無可戀男子配厭世旁白；上班族鬱悶共鳴。IG 13 萬粉，書迷型粉絲。</p>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <a class="card-link" href="https://www.instagram.com/mainasu_com/" target="_blank" rel="noopener">Instagram</a>
+        <a class="card-link" href="https://www.wowlavie.com/article/ae1800299" target="_blank" rel="noopener">La Vie 專訪</a>
+      </div>
+
+      <div class="card">
+        <h3 class="card-name">Keigo</h3>
+        <p class="card-style">動物擬人化黑色幽默</p>
+        <p class="card-desc">把生活辛酸用動物擬人化處理，出書《我的生活不可能那麼壞》。國際曝光好、商業變現強。</p>
+        <div class="stars">⭐⭐⭐⭐⭐</div>
+        <a class="card-link" href="https://www.juksy.com/archives/82952" target="_blank" rel="noopener">JUKSY 介紹</a>
+      </div>
+
+      <div class="card">
+        <h3 class="card-name">nagee</h3>
+        <p class="card-style">政治時事諷刺</p>
+        <p class="card-desc">幽默諷刺政治議題，台派代表性創作者，社論型插畫。</p>
+        <div class="stars">⭐⭐⭐⭐</div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-name">Kaiti Hsu</h3>
+        <p class="card-style">社論插畫家</p>
+        <p class="card-desc">插畫家兼平面設計師，作品議題性強，用簡潔構圖提出強烈質疑。</p>
+        <div class="stars">⭐⭐⭐⭐</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TIER A -->
+  <section id="tier-a" class="tier tier-a">
+    <div class="tier-header">
+      <span class="tier-badge">Tier A</span>
+      <h2 class="tier-title">上班族厭世 × 反諷日常</h2>
+      <span class="tier-desc">職場主題穩定流量</span>
+    </div>
+    <table class="table">
+      <thead>
+        <tr><th>創作者</th><th>風格定位</th><th>核心題材</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>厭世動物園</strong></td>
+          <td>動物擬人上班族</td>
+          <td>一天一圖終結職場負面情緒；<a href="https://www.instagram.com/zooofdepression/" target="_blank" rel="noopener">IG @zooofdepression</a></td>
+        </tr>
+        <tr>
+          <td><strong>白爛貓</strong></td>
+          <td>肥嘟嘟機車臉懶惰貓</td>
+          <td>懶惰上班族代言人，貼圖出身，受眾廣</td>
+        </tr>
+        <tr>
+          <td><strong>歡迎收看厭世上班族</strong></td>
+          <td>純職場厭世</td>
+          <td>奧客、豬隊友主題；<a href="https://www.books.com.tw/products/0010817744" target="_blank" rel="noopener">已出書</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- TIER B -->
+  <section id="tier-b" class="tier tier-b">
+    <div class="tier-header">
+      <span class="tier-badge">Tier B</span>
+      <h2 class="tier-title">日常觀察 × 反諷幽默</h2>
+      <span class="tier-desc">較輕鬆但有梗</span>
+    </div>
+    <table class="table">
+      <thead>
+        <tr><th>創作者</th><th>風格定位</th><th>核心題材 / 規模</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>洋蔥 Onion Man</strong></td>
+          <td>生活小故事幽默嘲諷</td>
+          <td>YouTube 113 萬訂閱，觀察入微，<a href="https://www.storm.mg/lifestyle/3870207" target="_blank" rel="noopener">風傳媒專文</a></td>
+        </tr>
+        <tr>
+          <td><strong>微疼</strong></td>
+          <td>人人不幸日常</td>
+          <td>WEBTOON 連載《不要笑當兵的人》《微不幸劇場》</td>
+        </tr>
+        <tr>
+          <td><strong>馬克</strong></td>
+          <td>職場觀察</td>
+          <td>老牌職場圖文，《職場求生記》</td>
+        </tr>
+        <tr>
+          <td><strong>阿啾</strong></td>
+          <td>職場 + 跨界</td>
+          <td>多角度生活觀察</td>
+        </tr>
+        <tr>
+          <td><strong>鹿人</strong></td>
+          <td>社會怪人系列</td>
+          <td>情侶經營，宿舍 + 怪人觀察</td>
+        </tr>
+        <tr>
+          <td><strong>聞氫哥</strong></td>
+          <td>網路梗文化</td>
+          <td>鄉民幽默</td>
+        </tr>
+        <tr>
+          <td><strong>鬼門圖文</strong></td>
+          <td>時事梗圖</td>
+          <td>反諷新聞與社會事件</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- TIER C -->
+  <section id="tier-c" class="tier tier-c">
+    <div class="tier-header">
+      <span class="tier-badge">Tier C</span>
+      <h2 class="tier-title">日常偏可愛萌系</h2>
+      <span class="tier-desc">反諷較弱，僅作備援</span>
+    </div>
+    <table class="table">
+      <thead>
+        <tr><th>創作者</th><th>粉絲量</th><th>風格</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>馬來貘 Cherng</strong></td><td>100 萬+</td><td>生活觀察小品</td></tr>
+        <tr><td><strong>Duncan</strong></td><td>300 萬+</td><td>卡通系日常</td></tr>
+        <tr><td><strong>掰掰啾啾</strong></td><td>150 萬+</td><td>可愛日常</td></tr>
+        <tr><td><strong>好想兔</strong></td><td>—</td><td>賤賤情侶</td></tr>
+        <tr><td><strong>囂搞</strong></td><td>—</td><td>情侶北鼻系列</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 篩選建議 -->
+  <section id="recommend" class="recommend">
+    <h2>🎯 篩選建議</h2>
+    <p class="sub">依照你的目標篩出最對位的合作對象</p>
+
+    <div class="reco-block">
+      <h3>若你要找「真正符合反諷 × 日常觀察」的核心三人</h3>
+      <table class="reco-table">
+        <tr>
+          <td class="medal">🏆</td>
+          <td class="who">厭世姬</td>
+          <td>反諷 + 社會議題兼顧，文字精準度最高</td>
+        </tr>
+        <tr>
+          <td class="medal">🏆</td>
+          <td class="who">霸軒</td>
+          <td>「人類超有病」直接打反諷主題，視覺辨識度爆表</td>
+        </tr>
+        <tr>
+          <td class="medal">🏆</td>
+          <td class="who">消極男子</td>
+          <td>厭世旁白與圖像對位精準，書迷型粉絲忠誠</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="reco-block">
+      <h3>若你要找「最商業可合作 × 流量穩」的反諷掛</h3>
+      <table class="reco-table">
+        <tr>
+          <td class="medal">🥇</td>
+          <td class="who">洋蔥 Onion Man</td>
+          <td>YouTube 113 萬訂閱，已有大量品牌業配經驗</td>
+        </tr>
+        <tr>
+          <td class="medal">🥈</td>
+          <td class="who">Keigo</td>
+          <td>已出書 + 國際曝光，黑色幽默有正面情緒包裝</td>
+        </tr>
+        <tr>
+          <td class="medal">🥉</td>
+          <td class="who">微疼</td>
+          <td>WEBTOON 平台連載，年輕族群滲透強</td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <p>資料來源：DailyView 網路溫度計、天下雜誌、La Vie、風傳媒、JUKSY、Bella 儂儂、Beauty321、三立新聞、博客來、TEEPR、vocus</p>
+    <p>由 Claude 整理 · 可自由分享 · 2026 / 5 / 14</p>
+  </footer>
+</div>
+</body>
+</html>
