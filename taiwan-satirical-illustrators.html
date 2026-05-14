@@ -32,6 +32,25 @@
     margin: 0 auto;
     padding: 40px 24px 80px;
   }
+  .topnav {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 16px;
+    margin-bottom: 32px;
+    font-size: 13px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .topnav a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .topnav a:hover { text-decoration: underline; }
+  .topnav .sep { color: var(--muted); }
   header {
     text-align: center;
     padding: 24px 0 40px;
@@ -275,6 +294,12 @@
 </head>
 <body>
 <div class="container">
+  <nav class="topnav">
+    <span style="color: var(--muted);">當前：圖文插畫家清單</span>
+    <span class="sep">·</span>
+    <a href="./2026-satirical-comics-trend.html">2026 反諷圖文趨勢報告 →</a>
+  </nav>
+
   <header>
     <h1>🎨 台灣「日常觀察 × 反諷好笑」圖文插畫家</h1>
     <p class="sub">給品牌、企劃、選 KOL 用的口袋名單</p>
