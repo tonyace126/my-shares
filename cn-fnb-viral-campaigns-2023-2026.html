@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2023-2026 大陸餐飲品牌社群爆紅事件大盤點</title>
+<style>
+  :root {
+    --bg: #faf7f2;
+    --card: #ffffff;
+    --ink: #1f1d1a;
+    --muted: #6e6a64;
+    --line: #e8e3da;
+    --accent: #c8553d;
+    --gold: #d4a017;
+    --highlight: #fff4e6;
+    --danger: #b85c5c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+    margin: 0;
+    padding: 0;
+  }
+  .container { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
+  .topnav {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 16px;
+    margin-bottom: 32px;
+    font-size: 13px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .topnav a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .topnav a:hover { text-decoration: underline; }
+  .topnav .sep { color: var(--muted); }
+  header {
+    text-align: center;
+    padding: 24px 0 40px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 40px;
+  }
+  header h1 { font-size: 28px; margin: 0 0 8px; font-weight: 800; letter-spacing: -0.5px; }
+  header .sub { color: var(--muted); font-size: 14px; margin: 0; }
+  header .meta { color: var(--muted); font-size: 12px; margin-top: 12px; font-style: italic; }
+
+  h2 {
+    font-size: 22px;
+    margin: 56px 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  h3 { font-size: 18px; margin: 32px 0 12px; color: var(--accent); }
+
+  .case-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 24px 26px;
+    margin-bottom: 20px;
+  }
+  .case-card.danger {
+    border-left: 4px solid var(--danger);
+  }
+  .case-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .case-title .num {
+    background: var(--accent);
+    color: #fff;
+    font-weight: 800;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .case-title .name {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .case-title .date {
+    color: var(--muted);
+    font-size: 13px;
+    margin-left: auto;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .table th, .table td {
+    padding: 11px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+    vertical-align: top;
+  }
+  .table th {
+    background: var(--highlight);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+  .table tr:last-child td { border-bottom: none; }
+  .table .num { color: var(--accent); font-weight: 700; }
+  .table a { color: var(--accent); text-decoration: none; }
+  .table a:hover { text-decoration: underline; }
+
+  ul.tight { margin: 10px 0 0 0; padding-left: 20px; }
+  ul.tight li { margin-bottom: 6px; font-size: 14px; }
+
+  .key-point {
+    background: var(--highlight);
+    border-left: 3px solid var(--accent);
+    padding: 10px 14px;
+    margin: 12px 0;
+    font-size: 14px;
+    border-radius: 0 6px 6px 0;
+  }
+  .key-point strong { color: var(--accent); }
+
+  .takeaway {
+    margin-top: 56px;
+    padding: 30px 32px;
+    background: linear-gradient(135deg, #fff4e6 0%, #fff 100%);
+    border-radius: 12px;
+    border: 1px solid var(--line);
+  }
+  .takeaway h2 { margin-top: 0; border-bottom: none; padding-bottom: 0; }
+  .takeaway ol { margin: 12px 0 0 24px; padding: 0; }
+  .takeaway ol li { margin-bottom: 14px; font-size: 14.5px; }
+  .takeaway ol li strong { color: var(--accent); }
+
+  .trend-box {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 14px;
+  }
+  .trend-box .label {
+    display: inline-block;
+    background: var(--gold);
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .trend-box .title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .trend-box ul { margin: 6px 0 0 18px; padding: 0; }
+  .trend-box li { font-size: 13.5px; margin-bottom: 4px; }
+
+  footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  footer a { color: var(--muted); text-decoration: underline; }
+  footer .sources { text-align: left; margin-top: 20px; }
+  footer .sources ul { font-size: 12px; padding-left: 18px; }
+  footer .sources li { margin-bottom: 4px; }
+  footer .sources a { color: var(--muted); }
+
+  @media (max-width: 600px) {
+    .container { padding: 24px 16px 60px; }
+    header h1 { font-size: 20px; }
+    .table { font-size: 13px; }
+    .table th, .table td { padding: 9px 8px; }
+    .case-title { flex-wrap: wrap; }
+    .case-title .date { margin-left: 0; width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="topnav">
+    <a href="./">🏠 分享首頁</a>
+    <span class="sep">·</span>
+    <a href="./taiwan-satirical-illustrators.html">圖文插畫家清單</a>
+    <span class="sep">·</span>
+    <a href="./2026-satirical-comics-trend.html">2026 反諷圖文趨勢</a>
+    <span class="sep">·</span>
+    <span style="color: var(--muted);">當前：大陸餐飲爆紅案例</span>
+  </nav>
+
+  <header>
+    <h1>🇨🇳 2023-2026 大陸餐飲品牌社群爆紅事件大盤點</h1>
+    <p class="sub">茶飲、咖啡、火鍋、復古餐飲 — 神話與翻車並陳</p>
+    <p class="meta">整理時間：2026 / 5 / 14　·　給品牌提案、行銷企劃、創意工作者參考</p>
+  </header>
+
+  <h2>🏆 S 級神話案例（教科書級）</h2>
+
+  <div class="case-card">
+    <div class="case-title">
+      <span class="num">1</span>
+      <span class="name">瑞幸 × 茅台「醬香拿鐵」</span>
+      <span class="date">2023 / 9 / 4</span>
+    </div>
+    <table class="table">
+      <tr><th>指標</th><th>成績</th></tr>
+      <tr><td>上市首日銷量</td><td class="num">542 萬杯</td></tr>
+      <tr><td>首日銷售額</td><td class="num">破 1 億人民幣</td></tr>
+      <tr><td>微博熱搜</td><td>上榜幾十個</td></tr>
+      <tr><td>抖音熱搜 + 挑戰榜</td><td>TOP 1</td></tr>
+      <tr><td>茅台微信指數</td><td class="num">環比上漲 1535%</td></tr>
+    </table>
+    <ul class="tight">
+      <li><strong>產品：</strong>白酒風味厚奶 + 53 度茅台（含 1ml）、酒精濃度 &lt; 0.5%、19 元定價</li>
+      <li><strong>致勝關鍵：</strong>極限反差 — 咖啡（年輕）vs 白酒（中老年商務），雙方都吃到對方客群</li>
+      <li><strong>後續：</strong>2024 龍年再推「醬香巧克力」遇冷，過半網友表示沒興趣，反差紅利已消耗</li>
+    </ul>
+  </div>
+
+  <div class="case-card">
+    <div class="case-title">
+      <span class="num">2</span>
+      <span class="name">喜茶 × FENDI「喜悅黃」</span>
+      <span class="date">2023 / 5</span>
+    </div>
+    <table class="table">
+      <tr><th>指標</th><th>成績</th></tr>
+      <tr><td>定價</td><td>19 元一杯（送 FENDI 杯墊、徽章、提袋）</td></tr>
+      <tr><td>FENDI 微信指數</td><td class="num">日常 80 萬 → 5/17 飆至 2380 萬</td></tr>
+      <tr><td>銷售</td><td>小程序當機、全城售罄</td></tr>
+    </table>
+    <ul class="tight">
+      <li><strong>致勝關鍵：</strong>「19 元買到 FENDI」— 對年輕女性是奢侈品入門票</li>
+      <li><strong>操作三段式：</strong>上新預熱 → 打卡分享 → UGC 二創</li>
+      <li><strong>意義：</strong>開創「茶飲 × 奢侈品」聯名範式，後被多家複製但無法超越</li>
+    </ul>
+  </div>
+
+  <div class="case-card">
+    <div class="case-title">
+      <span class="num">3</span>
+      <span class="name">海底撈 × 抖音「科目三」舞</span>
+      <span class="date">2023 冬</span>
+    </div>
+    <ul class="tight">
+      <li><strong>操作：</strong>員工在桌間走廊跳抖音神曲「科目三」（雙手打圈 + 扭腳招牌動作）</li>
+      <li><strong>病毒擴散：</strong>傳到香港、台灣、海外，「員工眼神死」變成另一個迷因梗</li>
+      <li><strong>爭議：</strong>客人嫌吵 → 部分分店改為晚間 7-8 點限定 → 後因版權問題部分停止</li>
+    </ul>
+    <div class="key-point">
+      <strong>意義：</strong>員工成為自媒體的新行銷型態 — 不是 KOL 帶貨，是「人人皆 KOL」。
+    </div>
+  </div>
+
+  <h2>🎨 IP 角色化操作（長線經營型）</h2>
+
+  <div class="case-card">
+    <div class="case-title">
+      <span class="num">4</span>
+      <span class="name">蜜雪冰城「雪王」IP 矩陣</span>
+      <span class="date">2023+</span>
+    </div>
+    <table class="table">
+      <tr><th>平台</th><th>數據</th></tr>
+      <tr><td>抖音「蜜雪冰城」官方</td><td class="num">366 萬粉</td></tr>
+      <tr><td>抖音「蜜雪冰城雪王」</td><td class="num">189 萬粉</td></tr>
+      <tr><td>#雪王# 話題累計播放</td><td class="num">38.9 億次</td></tr>
+    </table>
+    <ul class="tight">
+      <li><strong>致勝關鍵：</strong>把吉祥物變獨立 IP，跳脫產品直接賣角色</li>
+      <li><strong>延伸：</strong>2024 與《鳴潮》等遊戲 IP 聯名，攻二次元市場</li>
+    </ul>
+  </div>
+
+  <div class="case-card">
+    <div class="case-title">
+      <span class="num">5</span>
+      <span class="name">喜茶「超級植物茶」羽衣纖體瓶</span>
+      <span class="date">2024</span>
+    </div>
+    <ul class="tight">
+      <li><strong>成績：</strong>首月銷量破 350 萬杯，年度復購率 TOP 1</li>
+      <li><strong>累計：</strong>截至 2024 底，超級植物系列售出 3700 萬杯</li>
+    </ul>
+    <div class="key-point">
+      <strong>戰略意義：</strong>喜茶主動跳出聯名內卷，打「長週期大單品」策略，是 2024-2025 最重要的方向轉換。
+    </div>
+  </div>
+
+  <h2>📊 茶飲聯名軍備競賽（2024 數據）</h2>
+
+  <div class="key-point" style="font-size: 16px;">
+    <strong>2024 全年茶飲咖啡 IP 聯名超過 270 次。</strong>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr><th>品牌</th><th>聯名次數</th><th>策略</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>奈雪的茶</strong></td><td class="num">23 次</td><td>量大但開始放緩</td></tr>
+      <tr><td><strong>瑞幸咖啡</strong></td><td class="num">22 次</td><td>加速進擊</td></tr>
+      <tr><td><strong>樂樂茶</strong></td><td class="num">17 次</td><td>中腰部加碼</td></tr>
+    </tbody>
+  </table>
+
+  <p style="font-size: 14.5px; margin-top: 16px;">
+    💰 <strong>2024 行銷費用王：霸王茶姬投入超過 10 億人民幣。</strong>
+  </p>
+
+  <h2>🌍 出海與跨域案例</h2>
+
+  <div class="case-card">
+    <div class="case-title">
+      <span class="num">6</span>
+      <span class="name">WILLcha × 五糧液（新茶飲出海）</span>
+    </div>
+    <p style="font-size: 14px; margin: 0;">複製醬香拿鐵的「白酒風味茶」概念，攻海外華人市場。</p>
+  </div>
+
+  <div class="case-card danger">
+    <div class="case-title">
+      <span class="num">7</span>
+      <span class="name">文和友 — 餐飲界迪士尼的興衰</span>
+    </div>
+    <ul class="tight">
+      <li><strong>2020 廣州開幕：</strong>排隊 4.5 小時，引爆「復古場景沉浸式餐飲」</li>
+      <li><strong>2021 深圳開幕：</strong>當日預約破 5 萬號，茶顏悅色開深圳首店同步大排長龍</li>
+      <li><strong>2023 年末：</strong>深圳店商戶從上百家銳減到 11 家</li>
+      <li><strong>2025 / 2：</strong>廣州店拆招牌撤場，營業不到 5 年</li>
+    </ul>
+    <div class="key-point" style="border-left-color: var(--danger);">
+      <strong>教訓：</strong>場景紅利是一次性消耗，無法複製到非原生城市。
+    </div>
+  </div>
+
+  <h2>💥 翻車事件（給做提案的避雷指南）</h2>
+
+  <table class="table">
+    <thead>
+      <tr><th>事件</th><th>結果</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>霸王茶姬 6 杯收 6 元包裝費（只裝 2 袋）</td><td>全網炮轟</td></tr>
+      <tr><td>瑞幸 2024 龍年第一杯醬香巧克力</td><td>反差紅利耗盡，網友冷感</td></tr>
+      <tr><td>瑞幸 9.9 元咖啡價格戰 → 庫迪 8.8 元跟進</td><td>頭部品牌集體斷臂求生</td></tr>
+      <tr><td>文和友撤場</td><td>場景型餐飲不可複製</td></tr>
+    </tbody>
+  </table>
+
+  <h2>🔮 2025-2026 新趨勢</h2>
+
+  <div class="trend-box">
+    <span class="label">趨勢 01</span>
+    <div class="title">聯名疲乏 → 大單品回歸</div>
+    <p style="font-size: 14px; margin: 0;">喜茶、奈雪都在收手，改打「長週期招牌品」。</p>
+  </div>
+
+  <div class="trend-box">
+    <span class="label">趨勢 02</span>
+    <div class="title">茶咖合流</div>
+    <p style="font-size: 14px; margin: 0;">瑞幸殺入茶飲、蜜雪推咖啡子品牌 → 千億市場新戰局。</p>
+  </div>
+
+  <div class="trend-box">
+    <span class="label">趨勢 03</span>
+    <div class="title">平台演算法分化（2026 三大平台特性）</div>
+    <ul>
+      <li><strong>抖音：</strong>強娛樂、情緒煽動、爆款驅動</li>
+      <li><strong>小紅書：</strong>強信任、種草、長尾搜索</li>
+      <li><strong>視頻號：</strong>強私域、熟人裂變、中年滲透</li>
+    </ul>
+    <p style="font-size: 13px; color: var(--muted); margin-top: 8px; margin-bottom: 0;">
+      → 同一支短片在三平台命運可能完全相反。
+    </p>
+  </div>
+
+  <div class="takeaway">
+    <h2>🎯 給做品牌提案的 5 條取經筆記</h2>
+    <ol>
+      <li><strong>極限反差最炸</strong>（瑞幸×茅台、喜茶×FENDI）— 兩個極遠的世界硬接才有話題</li>
+      <li><strong>員工 ≠ 員工，員工 = 自媒體</strong>（海底撈科目三）— 第一線就是行銷現場</li>
+      <li><strong>IP 角色化比產品更持久</strong>（蜜雪冰城雪王）— 38.9 億播放靠的不是冰淇淋</li>
+      <li><strong>聯名是迷藥不是糧食</strong>（喜茶轉打大單品）— 270 次/年的軍備競賽紅利已被稀釋</li>
+      <li><strong>場景紅利會死</strong>（文和友撤場）— 在地復古無法異地複製</li>
+    </ol>
+  </div>
+
+  <footer>
+    <p>由 Claude 整理 · 可自由分享 · 2026 / 5 / 14</p>
+    <div class="sources">
+      <strong>主要資料來源：</strong>
+      <ul>
+        <li><a href="https://zhuanlan.zhihu.com/p/654408033" target="_blank" rel="noopener">瑞幸×茅台 542 萬杯案例分析 — 知乎</a></li>
+        <li><a href="https://www.woshipm.com/marketing/5942192.html" target="_blank" rel="noopener">12000 字解讀瑞幸聯名營銷策略 — 人人都是產品經理</a></li>
+        <li><a href="https://www.digitaling.com/projects/261463.html" target="_blank" rel="noopener">喜茶×FENDI 聯名復盤 — 數英</a></li>
+        <li><a href="https://www.woshipm.com/marketing/5831889.html" target="_blank" rel="noopener">喜茶 FENDI 案例：給品牌從業者的啟示錄 — 人人都是產品經理</a></li>
+        <li><a href="https://m.mp.oeeee.com/a/BAAFRD000020231201882133.html" target="_blank" rel="noopener">海底撈科目三：火到海外有人欣賞有人說土味 — 南方都市報</a></li>
+        <li><a href="https://www.ctwant.com/article/301144" target="_blank" rel="noopener">取消讓店員跳抖音舞 海底撈分店曝原因 — CTWANT</a></li>
+        <li><a href="https://www.woshipm.com/share/6111093.html" target="_blank" rel="noopener">30 天漲粉 293 萬：瑞幸、蜜雪如何成為流量黑洞 — 人人都是產品經理</a></li>
+        <li><a href="https://zhuanlan.zhihu.com/p/18121679273" target="_blank" rel="noopener">盤點全年 270 次茶飲咖啡 IP 聯名 — 知乎</a></li>
+        <li><a href="https://www.digitaling.com/articles/1037378.html" target="_blank" rel="noopener">250 個飲品聯名復盤：FENDI 茅台難複製 — 數英</a></li>
+        <li><a href="https://www.thepaper.cn/newsDetail_forward_30184128" target="_blank" rel="noopener">新茶飲品牌還能靠聯名改命嗎？ — 澎湃</a></li>
+        <li><a href="https://research.zhiweidata.com/2024/01/22/" target="_blank" rel="noopener">新消費領域茶飲品牌「開年大戲」聯名與危機 — 知微數據</a></li>
+        <li><a href="https://www.pingwest.com/a/236265" target="_blank" rel="noopener">文和友：一家超級排隊綜合體 — 品玩</a></li>
+        <li><a href="https://www.epochtimes.com/b5/25/2/25/n14445030.htm" target="_blank" rel="noopener">曾經炙手可熱 廣州文和友拆招牌撤場 — 大紀元</a></li>
+        <li><a href="https://www.ourchinastory.com/zh/1397" target="_blank" rel="noopener">灣區打卡：深圳「小香港」文和友再現九龍城寨 — 當代中國</a></li>
+        <li><a href="https://www.digitaling.com/articles/1350397.html" target="_blank" rel="noopener">WILLcha 聯名五糧液出海超成功 — 數英</a></li>
+        <li><a href="https://www.digitaling.com/articles/956227.html" target="_blank" rel="noopener">喜茶：聯名營銷界的天花板 — 數英</a></li>
+        <li><a href="https://www.dchbi.com/post/%E6%8A%96%E9%9F%B3-vs-%E5%B0%8F%E7%B4%85%E6%9B%B8-vs-%E8%A6%96%E9%A0%BB%E8%99%9F%EF%BC%9A2026-%E4%B8%89%E5%A4%A7%E5%B9%B3%E5%8F%B0%E7%9A%84%E7%AE%97%E6%B3%95%E5%B7%AE%E7%95%B0%E8%88%87%E5%85%A7%E5%AE%B9%E6%89%93%E6%B3%95%E8%A7%A3%E6%9E%90" target="_blank" rel="noopener">抖音 vs 小紅書 vs 視頻號：2026 算法差異 — DCHbi</a></li>
+        <li><a href="https://m.canyin88.com/zhuanlan/yingshangwang/2025/0512/99508.html" target="_blank" rel="noopener">11 大新茶飲品牌 2025 拓店計劃 — 餐飲 88</a></li>
+      </ul>
+    </div>
+    <p style="margin-top: 24px;"><a href="./">← 回到分享首頁</a></p>
+  </footer>
+</div>
+</body>
+</html>
