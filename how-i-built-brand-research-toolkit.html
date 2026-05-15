@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>從「幫我找銀行影片」到一個 GitHub plugin — 一個下午的開發故事</title>
+<meta name="description" content="一個下午，從「找銀行話題影片」這個簡單請求出發，意外做出一個 Claude Code plugin 並上 GitHub。記錄完整過程、踩到的牆、學到的事。">
+<style>
+  :root {
+    --bg: #faf7f2;
+    --card: #ffffff;
+    --ink: #1f1d1a;
+    --muted: #6e6a64;
+    --line: #e8e3da;
+    --accent: #c8553d;
+    --gold: #d4a017;
+    --highlight: #fff4e6;
+    --code-bg: #2a2218;
+    --code-text: #f3ede2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.75;
+    margin: 0;
+    padding: 0;
+  }
+  .container { max-width: 820px; margin: 0 auto; padding: 40px 24px 80px; }
+  .topnav {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 16px;
+    margin-bottom: 32px;
+    font-size: 13px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .topnav a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .topnav a:hover { text-decoration: underline; }
+  .topnav .sep { color: var(--muted); }
+  header {
+    text-align: center;
+    padding: 24px 0 40px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 40px;
+  }
+  header h1 { font-size: 30px; margin: 0 0 12px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.3; }
+  header .sub { color: var(--muted); font-size: 15px; margin: 0; }
+  header .meta { color: var(--muted); font-size: 12px; margin-top: 12px; font-style: italic; }
+
+  .hero {
+    background: var(--highlight);
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 0 0 48px;
+  }
+  .hero .tldr-label {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin: 0 0 10px;
+  }
+  .hero h2 {
+    font-size: 18px;
+    margin: 0 0 12px;
+    border: none;
+    padding: 0;
+    color: var(--ink);
+  }
+  .hero p { margin: 0 0 12px; }
+  .hero .cta {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 700;
+    margin-top: 8px;
+  }
+  .hero .cta:hover { background: #a8442f; }
+
+  h2 {
+    font-size: 22px;
+    margin: 56px 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+    font-weight: 800;
+  }
+  h3 { font-size: 17px; margin: 28px 0 12px; color: var(--accent); }
+
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+
+  blockquote {
+    background: var(--card);
+    border-left: 4px solid var(--accent);
+    margin: 20px 0;
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    color: var(--ink);
+  }
+  blockquote p:last-child { margin-bottom: 0; }
+  blockquote .speaker {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 14px;
+    background: var(--card);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  th, td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  th { background: var(--highlight); font-weight: 700; }
+  tr:last-child td { border-bottom: none; }
+
+  ul, ol { padding-left: 22px; margin: 0 0 16px; }
+  li { margin-bottom: 6px; }
+
+  code {
+    background: var(--card);
+    border: 1px solid var(--line);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 0.92em;
+    color: var(--accent);
+  }
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 16px 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  pre code { background: none; border: none; padding: 0; color: inherit; }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin: 24px 0 32px;
+  }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat .num {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1.2;
+  }
+  .stat .label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .pill {
+    display: inline-block;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--highlight);
+    color: var(--accent);
+    margin-right: 6px;
+    font-weight: 600;
+  }
+  .pill.warn { background: #fde8e0; color: #b85c5c; }
+  .pill.ok { background: #e3f0d8; color: #4a7a2a; }
+
+  footer {
+    margin-top: 80px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  footer a { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 24px; }
+    h2 { font-size: 19px; }
+    .container { padding: 20px 16px 60px; }
+    table { font-size: 13px; }
+    th, td { padding: 8px 10px; }
+    pre { font-size: 12px; padding: 12px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <nav class="topnav">
+    <a href="https://tonyace126.github.io/my-shares/">← 首頁</a>
+    <span class="sep">|</span>
+    <a href="https://tonyace126.github.io/my-shares/2026-satirical-comics-trend.html">2026 反諷圖文趨勢</a>
+    <span class="sep">|</span>
+    <a href="https://tonyace126.github.io/my-shares/cn-fnb-viral-campaigns-2023-2026.html">大陸餐飲爆紅事件</a>
+    <span class="sep">|</span>
+    <a href="https://github.com/tonyace126/brand-research-toolkit" target="_blank">📦 GitHub Plugin →</a>
+  </nav>
+
+  <header>
+    <h1>從「幫我找銀行影片」到一個 GitHub Plugin</h1>
+    <p class="sub">一個下午的 Claude Code 開發故事 ── 跟 AI 一起踩牆、發現、封裝</p>
+    <p class="meta">2026-05-15 · Tony Wang / Sugarfun · 約 8 分鐘</p>
+  </header>
+
+  <div class="hero">
+    <p class="tldr-label">TL;DR</p>
+    <h2>一個下午，從一句「幫我找銀行話題影片」出發，意外做出一個 Claude Code plugin 並上 GitHub。</h2>
+    <p>過程中發現：YouTube/PTT/Dcard/Mobile01/新聞 對 AI 友善，IG/FB/Threads/TikTok 是 Meta/字節的牆。並行 agent 比序列快 4 倍，KOL 才是金融類影片的真主場，誠實標 N/A 比編造有用。</p>
+    <p>把這套方法論封裝成 <strong>brand-research-toolkit</strong>，給喜歡當伸手牌的你。</p>
+    <a class="cta" href="https://github.com/tonyace126/brand-research-toolkit" target="_blank">看 GitHub Repo →</a>
+  </div>
+
+  <h2>故事的起點</h2>
+  <p>那天下午，我跟 Claude 說：</p>
+  <blockquote>
+    <span class="speaker">ME</span>
+    <p>爬官股銀行 &amp; 民營銀行話題影片</p>
+  </blockquote>
+
+  <p>就這麼一句話。我想要的是一份「YouTube + TikTok 近 30 天，所有官股 vs 主要民營，找高聲量話題影片」的清單。</p>
+
+  <p>Claude 反問了我幾個問題（時間範圍、銀行清單、產出形式），確認後就開始跑。它一口氣 dispatch 了 <strong>4 個並行 agent</strong>：YouTube 官股、YouTube 民營、TikTok 官股、TikTok 民營。</p>
+
+  <p>這是第一個讓我精神一振的時刻 ── 過去同樣的研究，我自己手動做要花 2-3 小時，這次 3 分鐘出第一版表格。</p>
+
+  <h2>但這只是開始 ── 殘酷的真相</h2>
+
+  <p>結果一拿到我就發現問題了。19 家銀行 × 2 平台的研究，<strong>TikTok 那邊全部是「無顯著話題影片」</strong>。一開始以為是 AI 偷懶，仔細看才發現：</p>
+
+  <p>TikTok 對所有外部工具是<strong>絕對的牆</strong>。WebSearch 只能搜到 hashtag 聚合頁，WebFetch 直接被 JS 牆擋下回傳 <code>Please wait...</code>。AI 沒有「假裝爬到」── 它是真的拿不到。</p>
+
+  <p>這逼我重新思考：<strong>各平台對 AI 的真實可達性差很多。</strong>整理了一張表給自己對照：</p>
+
+  <table>
+    <thead>
+      <tr><th>平台</th><th>AI 友善度</th><th>主要工具</th><th>備註</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>YouTube</td><td><span class="pill ok">✅ 高</span></td><td>WebSearch + Gemini 餵連結</td><td>Gemini 比 Claude 強（可直接看影片）</td></tr>
+      <tr><td>PTT</td><td><span class="pill ok">✅ 高</span></td><td>WebFetch ptt.cc</td><td>純 HTML，連推噓數都抓得到</td></tr>
+      <tr><td>Dcard</td><td><span class="pill ok">✅ 中</span></td><td>WebSearch site:dcard.tw</td><td>列表動態載入但單篇可抓</td></tr>
+      <tr><td>Mobile01</td><td><span class="pill ok">✅ 高</span></td><td>WebFetch + site:</td><td>傳統 phpBB 結構穩定</td></tr>
+      <tr><td>新聞媒體</td><td><span class="pill ok">✅ 高</span></td><td>WebSearch + WebFetch</td><td>UDN/ETtoday/自由 都行</td></tr>
+      <tr><td>Threads</td><td><span class="pill warn">⚠️ 牆</span></td><td>改用 KEYPO / Threads App</td><td>Meta 不開放給 Google index</td></tr>
+      <tr><td>FB</td><td><span class="pill warn">⚠️ 牆</span></td><td>改用 KEYPO / 第三方監聽</td><td>API 需 page admin 權限</td></tr>
+      <tr><td>TikTok</td><td><span class="pill warn">⚠️ 牆</span></td><td>改用 TikTok Creative Center</td><td>JS 牆 + 反爬蟲</td></tr>
+    </tbody>
+  </table>
+
+  <p>這張表，後來變成了 plugin 裡最重要的「誠實宣告」── 不裝懂、不假裝能爬。</p>
+
+  <h2>三個讓我繼續挖下去的發現</h2>
+
+  <h3>① KOL 才是金融影片的真主場</h3>
+  <p>表格整理完，最反直覺的發現是：銀行官方 YouTube 頻道幾乎全是「冷的」。8 大公股銀行近 30 天加起來只有 1-2 支可看的影片。</p>
+  <p>真正的高聲量在哪？<strong>SHIN LI 李勛一個人</strong>。他 4 月那支「2026 綜所稅信用卡攻略」一次把八大公股全包，比官方頻道熱十倍。台新 GOGO 改版炎上、永豐 DAWHO 100 萬門檻民怨 ── 全部是他撐起的話題。</p>
+  <p>「金融類 YouTube ≈ SHIN LI 李勛」── 這種 meta-insight 是研究跑完才意外冒出來的。</p>
+
+  <h3>② 並行 agent 比序列快 4 倍</h3>
+  <p>第二個發現很技術但很重要：<strong>在同一個訊息內 dispatch 多個 agent，比逐個跑快 3-4 倍</strong>。19 家銀行序列要跑 12 分鐘，4 個並行 agent 只要 3 分鐘。</p>
+  <p>這個模式變成 plugin 裡的 <code>parallel-agents.md</code> 範本。</p>
+
+  <h3>③ 誠實標 N/A 比編造有用</h3>
+  <p>當 agent 回報「TikTok 全部 19 家銀行近 30 天無顯著影片」── 這聽起來像「失敗」。但對讀者來說，這是<strong>有用的資訊</strong>：原來 TikTok 是金融品牌的盲區，主戰場仍在 YouTube + IG + Threads。</p>
+  <p>這個原則被寫進 SKILL.md 的「嚴格規則」：<strong>找不到就說找不到，禁止編造。</strong></p>
+
+  <h2>那一刻決定：要把方法論封裝成 plugin</h2>
+
+  <p>研究做完、整理成電子報那一刻，我突然意識到：<strong>這套流程值得做成可重複使用的工具。</strong></p>
+
+  <p>不是因為它複雜，而是因為它「踩過牆」── 平台可達性、並行 dispatch、誠實 N/A、HTML 範本、推到 GitHub Pages 的整套 muscle memory，全部值得封裝。</p>
+
+  <p>所以我跟 Claude 說：</p>
+  <blockquote>
+    <span class="speaker">ME</span>
+    <p>我想要把這種搜尋技能做成 skill 懶人包。大家可以自行下載運用調整，不管是找尋數據或是發布到 html 做成電子報的教學</p>
+  </blockquote>
+
+  <h2>用 superpowers skill 走完開發流程</h2>
+
+  <p>這時候 Claude 自動觸發 superpowers 的 brainstorming skill。整個下午的開發節奏變成：</p>
+
+  <ol>
+    <li><strong>Brainstorming</strong>：6 個關鍵問題對齊範圍（單 skill vs plugin、平台範圍、目標使用者、HTML 範本、發布流程）</li>
+    <li><strong>Spec</strong>：寫完 10 章設計文件，自審 + commit</li>
+    <li><strong>Plan</strong>：拆成 20 個 task，每個 task 有完整內容草稿</li>
+    <li><strong>Subagent-driven execution</strong>：每個 task dispatch 獨立 implementer，跑完 spec review + code quality review</li>
+    <li><strong>發布</strong>：建 GitHub repo、push code、push tag、建 release</li>
+  </ol>
+
+  <p>過程中最神奇的不是 AI 寫得快，而是「<strong>它把我自己會跳過的紀律做完了</strong>」── brainstorming 一題一題問、設計文件寫滿 10 章、20 個 task 每個都 commit、release notes 也寫好。我自己做開發很容易跳掉這些。</p>
+
+  <h2>成品數字</h2>
+
+  <div class="stats">
+    <div class="stat"><div class="num">23</div><div class="label">commits</div></div>
+    <div class="stat"><div class="num">20</div><div class="label">files</div></div>
+    <div class="stat"><div class="num">7</div><div class="label">平台手冊</div></div>
+    <div class="stat"><div class="num">2</div><div class="label">skills</div></div>
+    <div class="stat"><div class="num">1</div><div class="label">完整範例</div></div>
+  </div>
+
+  <h2>brand-research-toolkit 包了什麼</h2>
+
+  <h3>Skill 1：brand-issue-research</h3>
+  <p>跨平台研究品牌話題、輿情、廣告活動。並行查多平台 → 整合表格 → 觀察小結。包含 7 個平台手冊（YouTube / PTT / Dcard / Mobile01 / 新聞 / Threads-FB），每個都標註 AI 真實可達性 + 該用什麼工具繞。</p>
+  <p>裡面附一份完整跑過的銀行研究範例 ── <code>bank-research-2026-05.md</code>，當教材用。</p>
+
+  <h3>Skill 2：publish-research-html</h3>
+  <p>把任何研究結果做成乾淨響應式 HTML，自動 push 到你的 GitHub Pages repo。</p>
+  <p>第一次使用會問你 5 個問題（repo 路徑、對外網址、作者、是否要自訂主題、主題 CSS 檔名），寫入設定檔 <code>~/.config/research-publisher.json</code>。下次直接用。</p>
+  <p>HTML 範本用 8 個 CSS 變數設計，要改色改字一個檔搞定。</p>
+
+  <h2>怎麼用</h2>
+
+  <pre><code># 安裝（在 Claude Code 內）
+/plugin install tonyace126/brand-research-toolkit
+
+# 使用
+對 Claude 說：
+「研究永豐銀行近 30 天的 PTT + Dcard + 新聞輿情」
+「盤點台灣前 10 大民營銀行的 YouTube 聲量」
+「研究 X 品牌在 PTT/Dcard 怎麼被討論」
+
+# 研究跑完
+Claude 會問：「要做成 HTML 電子報嗎？」
+回「好」 → 自動套範本、推到你的 GitHub Pages。</code></pre>
+
+  <h2>學到的事</h2>
+
+  <ul>
+    <li><strong>AI 對不同平台能力差很多</strong>，不要假裝它都能爬。誠實標牆、給替代工具，比硬幹有價值</li>
+    <li><strong>並行 dispatch 是省時神技</strong>，但要在同一個訊息內發出去</li>
+    <li><strong>方法論值得封裝</strong>，跑兩次以上就該想能不能變成 skill</li>
+    <li><strong>superpowers 把開發紀律做給你</strong>，你只要回答問題、確認設計</li>
+    <li><strong>「找不到就說找不到」</strong>是工程紀律也是 PR 友善 ── 客戶比較怕你編造，不怕你誠實</li>
+  </ul>
+
+  <h2>誰適合用</h2>
+
+  <p>定位寫在 spec 裡：「進階 marketing 使用者（會用 ChatGPT/Gemini，但不一定碰過 Claude Code）/ 喜歡當伸手牌的你。」</p>
+
+  <p>翻譯成白話：</p>
+  <ul>
+    <li>常需要做品牌口碑研究、競品分析、輿情盤點</li>
+    <li>受不了自己 Google 一頁一頁翻</li>
+    <li>想要每週固定產出電子報但不想自己排版</li>
+    <li>有 GitHub Pages 想活用</li>
+  </ul>
+
+  <p>如果你是這種人，<a href="https://github.com/tonyace126/brand-research-toolkit" target="_blank">這個 repo</a> 就是給你的。</p>
+
+  <h2>下一步</h2>
+
+  <p>v0.1.0 是 MVP。我自己會用一段時間，看哪些平台手冊需要再深、哪些 troubleshooting 要加。歡迎 fork、開 issue、寄信給我。</p>
+
+  <p>Repo：<a href="https://github.com/tonyace126/brand-research-toolkit" target="_blank">github.com/tonyace126/brand-research-toolkit</a></p>
+  <p>v0.1.0 Release：<a href="https://github.com/tonyace126/brand-research-toolkit/releases/tag/v0.1.0" target="_blank">看 release notes</a></p>
+
+  <footer>
+    本文 2026-05-15 寫於台北 · Tony Wang / Sugarfun · 由 Claude Code 協作完成<br>
+    分享櫃首頁：<a href="https://tonyace126.github.io/my-shares/">tonyace126.github.io/my-shares</a>
+  </footer>
+
+</div>
+
+</body>
+</html>
