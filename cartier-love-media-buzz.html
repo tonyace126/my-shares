@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cartier LOVE — 近兩年媒體曝光與品牌策略觀察</title>
+<style>
+  :root {
+    --bg: #faf7f2;
+    --card: #ffffff;
+    --ink: #1f1d1a;
+    --muted: #6e6a64;
+    --line: #e8e3da;
+    --accent: #c8553d;
+    --gold: #d4a017;
+    --highlight: #fff4e6;
+    --good: #e8f3ec;
+    --bad: #fbeceb;
+    --neutral: #f3efe8;
+    --deep: #2e1a14;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+    margin: 0;
+    padding: 0;
+  }
+  .container { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
+  .topnav {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 16px;
+    margin-bottom: 32px;
+    font-size: 13px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .topnav a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .topnav a:hover { text-decoration: underline; }
+  .topnav .sep { color: var(--muted); }
+
+  header {
+    text-align: center;
+    padding: 24px 0 40px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 40px;
+  }
+  header h1 { font-size: 30px; margin: 0 0 8px; font-weight: 800; letter-spacing: -0.5px; }
+  header .sub { color: var(--muted); font-size: 14px; margin: 0; }
+  header .meta { color: var(--muted); font-size: 12px; margin-top: 12px; font-style: italic; }
+
+  h2 {
+    font-size: 22px;
+    margin: 48px 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  h3 { font-size: 17px; margin: 28px 0 12px; color: var(--accent); }
+
+  .hero-box {
+    background: linear-gradient(135deg, #fff4e6 0%, #fff 100%);
+    padding: 24px 28px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    margin-bottom: 24px;
+  }
+  .hero-box h3 {
+    margin-top: 0;
+    color: var(--ink);
+    font-size: 18px;
+  }
+  .hero-box p { margin: 0 0 8px; font-size: 15px; }
+  .hero-box .quote {
+    margin-top: 10px;
+    padding-left: 16px;
+    border-left: 3px solid var(--accent);
+    color: var(--muted);
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  .axis-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px 26px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .axis-card .rank {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 800;
+    font-size: 13px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+  .axis-card .rank.gold { background: var(--gold); }
+  .axis-card .rank.bronze { background: #8c6a4a; }
+  .axis-card h3 {
+    margin: 0 0 14px;
+    color: var(--ink);
+    font-size: 19px;
+    line-height: 1.5;
+  }
+  .axis-card .body { font-size: 14.5px; line-height: 1.75; }
+  .axis-card .body p { margin: 6px 0; }
+  .axis-card ul { margin: 8px 0; padding-left: 18px; }
+  .axis-card li { font-size: 14px; margin-bottom: 6px; }
+  .axis-card .pricing {
+    margin-top: 12px;
+    background: var(--highlight);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+  }
+  .axis-card .pricing strong { color: var(--accent); }
+  .axis-card .strategy {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line);
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  .axis-card .strategy strong { color: var(--ink); }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    background: var(--card);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .table th, .table td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+    vertical-align: top;
+  }
+  .table th {
+    background: var(--highlight);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+  .table tr:last-child td { border-bottom: none; }
+  .table a { color: var(--accent); text-decoration: none; word-break: break-word; }
+  .table a:hover { text-decoration: underline; }
+
+  .celeb-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .celeb-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .celeb-card .name { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .celeb-card .where { color: var(--muted); font-size: 12px; margin-bottom: 6px; }
+  .celeb-card .item { font-size: 13.5px; }
+
+  .match-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 20px 0;
+    background: var(--card);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .match-table th {
+    background: var(--deep);
+    color: #fff;
+    padding: 14px;
+    font-size: 14px;
+    text-align: left;
+    letter-spacing: 0.5px;
+  }
+  .match-table td {
+    padding: 16px;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+    vertical-align: middle;
+  }
+  .match-table tr:last-child td { border-bottom: none; }
+  .match-table td.pain { background: var(--bad); color: var(--ink); }
+  .match-table td.fix { background: var(--good); color: var(--ink); font-weight: 600; }
+  .match-table td .arrow {
+    display: inline-block;
+    margin: 0 4px;
+    color: var(--accent);
+    font-weight: 800;
+  }
+
+  .insight-box {
+    background: var(--deep);
+    color: #fff;
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin: 24px 0;
+  }
+  .insight-box h3 {
+    margin: 0 0 10px;
+    color: #ffd9b0;
+    font-size: 18px;
+  }
+  .insight-box p { margin: 6px 0; font-size: 14.5px; line-height: 1.75; }
+  .insight-box strong { color: #ffd9b0; }
+
+  .strategy-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .strategy-card .h {
+    font-weight: 700;
+    font-size: 15.5px;
+    margin-bottom: 8px;
+    color: var(--accent);
+  }
+  .strategy-card .d { font-size: 14px; color: var(--ink); line-height: 1.7; }
+
+  .related {
+    margin-top: 40px;
+    background: var(--neutral);
+    border-radius: 10px;
+    padding: 18px 22px;
+    font-size: 13.5px;
+  }
+  .related .label {
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .related a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .related a:hover { text-decoration: underline; }
+
+  .note-box {
+    background: var(--neutral);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 24px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  footer a { color: var(--muted); text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    .container { padding: 24px 16px 60px; }
+    header h1 { font-size: 22px; }
+    .celeb-grid { grid-template-columns: 1fr; }
+    .table { font-size: 13px; }
+    .table th, .table td { padding: 10px 8px; }
+    .match-table td { padding: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="topnav">
+    <a href="./">🏠 分享首頁</a>
+    <span class="sep">·</span>
+    <a href="./cartier-love-social-pulse.html">Cartier LOVE 社群口碑</a>
+    <span class="sep">·</span>
+    <a href="./2026-satirical-comics-trend.html">2026 反諷圖文趨勢</a>
+    <span class="sep">·</span>
+    <span style="color: var(--muted);">當前:Cartier LOVE 媒體曝光</span>
+  </nav>
+
+  <header>
+    <h1>💎 Cartier LOVE — 近兩年媒體曝光與品牌策略觀察</h1>
+    <p class="sub">2024 / 2025 LOVE Unlimited 上市 × Sofia Coppola × Jacob Elordi × 多元名人 × 全球媒體稿</p>
+    <p class="meta">整理時間:2026 / 5 / 19　·　給品牌、廣告、創意團隊提案參考</p>
+  </header>
+
+  <div class="hero-box">
+    <h3>🎯 一句話結論</h3>
+    <p><strong>2025 年 Cartier 用「LOVE Unlimited」軟鍊新款打了一場結構性大戰。</strong></p>
+    <p>表面是新品上市,實際是品牌策略性地<strong>正面回應「螺絲起子很難用」這個十年老痛點</strong> — 直接把社群最痛的點,翻轉成新品最大賣點。</p>
+    <div class="quote">
+      搭配本頁姊妹篇 <a href="./cartier-love-social-pulse.html" style="color: var(--accent); font-weight: 600;">「Cartier LOVE 台灣社群口碑觀察」</a> 一起看,可看出消費者抱怨與品牌回應之間的清晰對位。
+    </div>
+  </div>
+
+  <h2>📌 近兩年三大新聞主軸</h2>
+
+  <div class="axis-card">
+    <span class="rank">🥇 主軸 #1</span>
+    <h3>2025 LOVE Unlimited 新款上市 — 年度最大事件</h3>
+    <div class="body">
+      <p><strong>新品核心</strong></p>
+      <ul>
+        <li>全新「軟鍊式」手環,<strong>200 枚金質部件</strong>串聯,取代原本硬式橢圓</li>
+        <li><strong>專利隱藏式開合裝置</strong> — 用指尖輕壓即可解鎖,<strong>無須螺絲起子</strong></li>
+        <li>「互扣相容」功能 — 多條手鏈可串接,象徵「無限延伸的愛」</li>
+        <li>GADROON 紋飾強化光影折射</li>
+        <li>三色齊發:黃 K 金、白 K 金、玫瑰金,同步推出戒指</li>
+      </ul>
+      <div class="pricing">
+        💰 <strong>定價</strong>:18K 黃 K 金 7mm — 約 <strong>NT$303,000</strong>　·　白 K 金款 — 約 <strong>NT$325,000</strong>
+      </div>
+      <div class="strategy">
+        💡 <strong>設計理念翻轉</strong>:從「硬式束縛感」→「柔軟而持續蛻變的愛」;從「鎖在身上」→「可重新連結、可疊加」。
+      </div>
+    </div>
+  </div>
+
+  <div class="axis-card">
+    <span class="rank gold">🥈 主軸 #2</span>
+    <h3>Sofia Coppola × Jacob Elordi 全球 Campaign</h3>
+    <div class="body">
+      <ul>
+        <li><strong>Jacob Elordi</strong> 成為 Cartier 全新品牌大使(他首次擔任 Cartier 大使)</li>
+        <li><strong>Sofia Coppola</strong> 執導廣告影片,於紐約拍攝</li>
+        <li>Jacob 親妹 <strong>Isabella Elordi</strong> 拍幕後紀錄</li>
+        <li>主視覺風格:<strong>柔光 × 古典美式 × 復古質感</strong>(典型 Coppola 美學)</li>
+      </ul>
+      <div class="strategy">
+        💡 <strong>戰略意義</strong>:用「一個男演員 + 一個女導演」的搭配,刻意拓展「LOVE 不只是女性精品」的市場邊界。
+      </div>
+    </div>
+  </div>
+
+  <div class="axis-card">
+    <span class="rank bronze">🥉 主軸 #3</span>
+    <h3>多元名人配戴 — 跨性別 × 跨地域 × 跨類型</h3>
+    <div class="body">
+      <div class="celeb-grid">
+        <div class="celeb-card">
+          <div class="name">Jisoo(Blackpink)</div>
+          <div class="where">高雄 DEADLINE 演唱會</div>
+          <div class="item">LOVE Unlimited 白 K 金 + Trinity 耳環</div>
+        </div>
+        <div class="celeb-card">
+          <div class="name">Taylor Swift</div>
+          <div class="where">紐約街拍</div>
+          <div class="item">兩只黃金 LOVE Unlimited <strong>疊戴</strong></div>
+        </div>
+        <div class="celeb-card">
+          <div class="name">Jacob Elordi</div>
+          <div class="where">品牌大使 Campaign</div>
+          <div class="item">LOVE Unlimited 男款主視覺</div>
+        </div>
+        <div class="celeb-card">
+          <div class="name">Timothée Chalamet</div>
+          <div class="where">國際媒體街拍</div>
+          <div class="item">經典 LOVE 手環</div>
+        </div>
+      </div>
+      <div class="strategy">
+        💡 <strong>戰略意義</strong>:從「情侶對戒」→「自我表達」。性別中性化路線非常明顯,在亞洲(Jisoo)× 美國(Taylor / Jacob / Timothée)雙線並進。
+      </div>
+    </div>
+  </div>
+
+  <h2>📰 媒體稿清單(分類整理)</h2>
+
+  <h3>🇹🇼 台灣主流時尚媒體</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th style="width: 22%;">媒體</th>
+        <th>標題重點</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Marie Claire 台灣</strong></td>
+        <td><a href="https://www.marieclaire.com.tw/fashion/news/89400/cartier-love-unlimited" target="_blank" rel="noopener">從泰勒絲、Jisoo 到雅各艾洛迪,全新 Cartier Love 手環穿搭圖鑑與價格</a></td>
+      </tr>
+      <tr>
+        <td><strong>Marie Claire 試戴報告</strong></td>
+        <td><a href="https://www.marieclaire.com.tw/fashion/try-on/27555" target="_blank" rel="noopener">Cartier Love 入門輕珠寶系列最新版本 4 大重點</a></td>
+      </tr>
+      <tr>
+        <td><strong>Bella 儂儂</strong></td>
+        <td><a href="https://www.bella.tw/articles/jewelry/54350/jisoo-yanchanghui-cartier-xin-shouhuan-7xuan" target="_blank" rel="noopener">卡地亞經典手環推薦 7 款:Jisoo 同款 Love 熱度不減</a></td>
+      </tr>
+      <tr>
+        <td><strong>聯合報 udn</strong></td>
+        <td><a href="https://udn.com/news/story/7270/8716344" target="_blank" rel="noopener">卡地亞經典設計 溫馨五月致敬最值得的母親</a></td>
+      </tr>
+      <tr>
+        <td><strong>udnSTYLE</strong></td>
+        <td><a href="https://style.udn.com/style/story/8085/6025439" target="_blank" rel="noopener">愛就是讓彼此做自己!卡地亞情人節送禮指南</a></td>
+      </tr>
+      <tr>
+        <td><strong>The Femin</strong></td>
+        <td><a href="https://thefemin.com/2025/11/cartier-love-unlimited-bracelet-worn-by-jisoo-at-kaohsiung-concert/" target="_blank" rel="noopener">Jisoo 高雄演唱會 Cartier 手環的愛情寓意</a></td>
+      </tr>
+      <tr>
+        <td><strong>Time Square 時間觀念</strong></td>
+        <td><a href="https://www.woodstone-online.com/2025/05/cartier61192/" target="_blank" rel="noopener">卡地亞母親節臻選呈獻 經典設計詮釋無私母愛</a></td>
+      </tr>
+      <tr>
+        <td><strong>PopLady</strong></td>
+        <td><a href="https://poplady-mag.com/article/300808/2025-%E6%AF%8D%E8%A6%AA%E7%AF%80-%E7%8F%A0%E5%AF%B6-%E6%8E%A8%E8%96%A6" target="_blank" rel="noopener">2025 母親節珠寶推薦:Cartier、BVLGARI 與 Dior</a></td>
+      </tr>
+      <tr>
+        <td><strong>MMH Vintage</strong></td>
+        <td><a href="https://www.mmh-vintage.com/cartier%E5%8D%A1%E5%9C%B0%E4%BA%9E2025%E3%80%8A%E8%87%AA%E7%84%B6%E8%97%9D%E5%A2%83%E3%80%8B%E9%80%BE260%E4%BB%B6%E9%A0%82%E7%B4%9A%E7%8F%A0%E5%AF%B6%E5%8C%AF%E8%81%9A%E5%8F%B0%E7%81%A3%EF%BC%8C/" target="_blank" rel="noopener">Cartier 2025《自然藝境》頂級珠寶展(台灣本地大事件)</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>🇭🇰 港澳專業時尚媒體</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th style="width: 22%;">媒體</th>
+        <th>標題重點</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Vogue HK</strong></td>
+        <td><a href="https://www.voguehk.com/zh/article/luxury/valentineday-2025-luxe-jew-cartier-debeers-tiffanylock-love/" target="_blank" rel="noopener">2025 情人節禮物推介 / Cartier × Tiffany Lock 對比</a></td>
+      </tr>
+      <tr>
+        <td><strong>HK01</strong></td>
+        <td><a href="https://www.hk01.com/%E7%A9%BF%E6%90%AD%E7%AD%86%E8%A8%98/732536/%E6%83%85%E4%BA%BA%E7%AF%80%E7%A6%AE%E7%89%A9-11%E6%AC%BEcartier%E7%B2%BE%E5%93%81%E9%A6%96%E9%A3%BE-%E6%89%8B%E9%8C%B6%E6%8E%A8%E8%96%A6-%E6%9A%97%E8%97%8F%E6%84%9B%E8%AA%9E%E5%86%A7%E7%88%86%E6%84%9B%E4%BA%BA" target="_blank" rel="noopener">情人節禮物:11 款 Cartier 精品首飾、手錶推薦</a></td>
+      </tr>
+      <tr>
+        <td><strong>Sunday More</strong></td>
+        <td><a href="https://www.sundaymore.com/%E4%BF%9D%E5%80%BC%E5%90%8D%E9%8C%B6%E7%8F%A0%E5%AF%B6/cartier-%E7%B6%B2%E8%B3%BC-952508/" target="_blank" rel="noopener">Cartier 網購情人節驚喜推介</a></td>
+      </tr>
+      <tr>
+        <td><strong>WatchViews</strong></td>
+        <td><a href="https://watchviews.com/2025/10/cartier-love-unlimited/" target="_blank" rel="noopener">當愛不再受枷鎖限制:卡地亞 Love Unlimited</a></td>
+      </tr>
+      <tr>
+        <td><strong>Iconicmen(馬來西亞華文)</strong></td>
+        <td><a href="https://iconicmen.com.my/cartier-%E5%8D%A1%E5%9C%B0%E4%BA%9A%E6%8E%A8%E5%87%BA%E5%85%A8%E6%96%B0-love-unlimited-%E7%B3%BB%E5%88%97%EF%BC%8C%E4%BB%A5%E6%B5%81%E7%95%85%E3%80%81%E4%BA%B2%E5%AF%86%E3%80%81%E6%84%89%E6%82%A6/" target="_blank" rel="noopener">Cartier 推全新 Love Unlimited:流暢、親密、愉悅</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>🌍 國際媒體(可作品牌策略對標)</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th style="width: 28%;">媒體</th>
+        <th>重點</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Who What Wear</strong></td>
+        <td>Jacob Elordi、Taylor Swift、Timothée Chalamet 都戴 LOVE 的趨勢分析</td>
+      </tr>
+      <tr>
+        <td><strong>L'Officiel Singapore</strong></td>
+        <td>Cartier presents LOVE Unlimited: Jacob Elordi through eyes of Sofia Coppola</td>
+      </tr>
+      <tr>
+        <td><strong>GQ Middle East</strong></td>
+        <td>Jacob Elordi × Sofia Coppola 創意合作報導</td>
+      </tr>
+      <tr>
+        <td><strong>Hypebae / Sharp Magazine</strong></td>
+        <td>廣告幕後製作與時尚產業評論</td>
+      </tr>
+      <tr>
+        <td><strong>Something About Rocks</strong></td>
+        <td>珠寶專業媒體深度開箱與設計剖析</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>🔥 痛點 × 回應對照 — Cartier 怎麼用新品解掉社群罵了十年的事</h2>
+
+  <p style="font-size: 14.5px; color: var(--muted); margin-bottom: 16px;">
+    對照昨天那份 <a href="./cartier-love-social-pulse.html" style="color: var(--accent); font-weight: 600;">PTT / Dcard 口碑觀察</a>,可看出 LOVE Unlimited 不是隨便出新品 — 它是品牌對社群三大老痛點的<strong>結構性回應</strong>。
+  </p>
+
+  <table class="match-table">
+    <thead>
+      <tr>
+        <th>消費者抱怨(來自 PTT/Dcard)</th>
+        <th>LOVE Unlimited 的回應</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="pain">「螺絲起子很智障、開合不方便」</td>
+        <td class="fix"><span class="arrow">→</span>專利<strong>隱藏式開合</strong>,指尖輕壓即可解鎖</td>
+      </tr>
+      <tr>
+        <td class="pain">「邊角太硬、戴起來不舒適、會刮人」</td>
+        <td class="fix"><span class="arrow">→</span><strong>軟鍊式 200 部件</strong>串聯,完全貼合手腕</td>
+      </tr>
+      <tr>
+        <td class="pain">「不能疊戴、跟其他系列不協調」</td>
+        <td class="fix"><span class="arrow">→</span><strong>互扣相容</strong>,可無限串接、自由疊加</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="insight-box">
+    <h3>💎 核心洞察</h3>
+    <p>這不是巧合,是品牌策略性「升級」。</p>
+    <p><strong>Cartier 把消費者最痛的點,變成新品最大賣點。</strong></p>
+    <p style="margin-top: 12px; font-size: 13.5px; opacity: 0.85;">
+      ──── 這套手法值得品牌學:不是否認舊版缺點,而是用一個進化的新版本回答市場 10 年來的抱怨。「LOVE」這個 IP 不變,但「LOVE 怎麼戴」徹底鬆綁。
+    </p>
+  </div>
+
+  <h2>🎯 兩個品牌策略觀察</h2>
+
+  <div class="strategy-card">
+    <div class="h">策略觀察 #1|去性別化 — 拓寬「LOVE 不只屬於女性 / 不只屬於情侶」</div>
+    <div class="d">同步啟用 <strong>Jacob Elordi(男)+ Jisoo / Taylor Swift(女)+ Timothée Chalamet(男)</strong>,刻意打破過去 LOVE 系列偏女性、偏情侶的論述。把「LOVE」從「兩個人的承諾」延伸成「一個人可以送給自己的標記」。</div>
+  </div>
+
+  <div class="strategy-card">
+    <div class="h">策略觀察 #2|去枷鎖化 — 廣告語從「鎖住的愛」轉向「讓愛不再受枷鎖限制」</div>
+    <div class="d">舊 LOVE 系列的設計語言是「螺絲鎖在你身上 → 解不開的承諾」;新 LOVE Unlimited 的語言是「<strong>可解開、可串接、可重組</strong>」。直接呼應 Z 世代「拒絕被定義、流動的愛」的價值觀。WatchViews 的標題「<strong>當愛不再受枷鎖限制</strong>」精準命中這層轉變。</div>
+  </div>
+
+  <div class="related">
+    <div class="label">🔗 配對閱讀</div>
+    <p>本頁(媒體與品牌策略)+ <a href="./cartier-love-social-pulse.html">姊妹篇 Cartier LOVE 社群口碑觀察(PTT/Dcard)</a> = Cartier LOVE 在台灣的「消費者 × 品牌」雙視角全景。提案時建議成對使用。</p>
+  </div>
+
+  <div class="note-box">
+    📋 <strong>資料說明</strong>:本頁所引媒體稿、廣編稿、新聞報導均為公開可查連結,僅作市場觀察與品牌策略研究參考,不代表任何品牌或媒體立場。定價以官方公告為準。
+  </div>
+
+  <footer>
+    <p>資料來源:Marie Claire 台灣、Bella 儂儂、聯合報、udnSTYLE、Vogue HK、HK01、WatchViews、Who What Wear、L'Officiel、Hypebae、Sharp Magazine、Cartier 官網</p>
+    <p>由 Claude 整理 · 可自由分享 · 2026 / 5 / 19</p>
+    <p><a href="./">← 回到分享首頁</a></p>
+  </footer>
+</div>
+</body>
+</html>
