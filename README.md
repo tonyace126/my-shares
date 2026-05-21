@@ -11,6 +11,7 @@ Tony 的分享頁面集（由 Claude 自動維護）。
 - 🛠️ [brand-research-toolkit 完整安裝教學（Mac & Windows）](https://tonyace126.github.io/my-shares/brand-research-toolkit-install-guide.html)
 - 💍 [Cartier LOVE 系列 — 台灣 PTT / Dcard 口碑觀察](https://tonyace126.github.io/my-shares/cartier-love-social-pulse.html)
 - 💎 [Cartier LOVE — 近兩年媒體曝光與品牌策略觀察](https://tonyace126.github.io/my-shares/cartier-love-media-buzz.html)
+- 🎬 [EP3 場記表（現場即時記錄互動工具）](https://tonyace126.github.io/my-shares/ep3-shooting-log.html)
 
 每次更新由 Claude 直接 git push，GitHub Pages 約 1 分鐘自動上線。
 

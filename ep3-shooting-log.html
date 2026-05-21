@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="EP3場記">
+<title>EP3 場記表</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+:root {
+  --bg: #f5f4f0;
+  --card: #ffffff;
+  --ink: #1a1a18;
+  --ink2: #5f5e5a;
+  --line: #e0ddd4;
+  --ok: #1D9E75;
+  --ng: #E24B4A;
+  --bk: #EF9F27;
+  --gold: #D97706;
+  --primary: #534AB7;
+  --primary-bg: #EEEDFE;
+  --shot: #1D4FCC;
+}
+html, body { background: var(--bg); color: var(--ink); font-family: -apple-system, "Helvetica Neue", "Noto Sans TC", sans-serif; min-height: 100vh; }
+body { padding-bottom: 100px; }
+
+.header {
+  background: var(--ink);
+  color: #fff;
+  padding: 12px 14px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.header-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; line-height: 1.4; }
+.header-sub { font-size: 11px; opacity: 0.7; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 3px;
+  padding: 8px 10px;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 56px;
+  z-index: 99;
+}
+.stat { text-align: center; padding: 6px 2px; border-radius: 8px; background: #f5f4f0; }
+.stat-n { font-size: 17px; font-weight: 700; line-height: 1; }
+.stat-l { font-size: 9px; color: var(--ink2); margin-top: 2px; }
+.stat.ok .stat-n { color: var(--ok); }
+.stat.ng .stat-n { color: var(--ng); }
+.stat.bk .stat-n { color: var(--bk); }
+.stat.gold .stat-n { color: var(--gold); }
+.stat.shot .stat-n { color: var(--shot); }
+
+.zone-head {
+  margin: 16px 8px 4px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.zone-head.A { background: linear-gradient(135deg, #1D6BCC 0%, #1D4FCC 100%); }
+.zone-head.B { background: linear-gradient(135deg, #CC2828 0%, #99192A 100%); }
+.zone-head.EX { background: linear-gradient(135deg, #4F7C4D 0%, #355937 100%); }
+.zone-label {
+  background: rgba(255,255,255,0.25);
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+.zone-name { flex: 1; }
+.zone-count {
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+/* ── 段落 ── */
+.section { background: #fff; margin: 6px 8px; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.section.moved { 
+  animation: highlight 0.6s ease-out;
+}
+@keyframes highlight {
+  0% { background: #EEEDFE; transform: scale(1.02); }
+  100% { background: #fff; transform: scale(1); }
+}
+.section-head {
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-left: 4px solid;
+  user-select: none;
+}
+.section-head.A { border-color: #1D6BCC; background: #E8F0FE; }
+.section-head.B { border-color: #CC2828; background: #FCEBEB; }
+.section-head.EX { border-color: #4F7C4D; background: #E8F0E5; }
+
+.move-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.move-btn {
+  width: 26px;
+  height: 18px;
+  border: none;
+  background: rgba(0,0,0,0.08);
+  border-radius: 4px;
+  font-size: 11px;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  line-height: 1;
+}
+.move-btn:active {
+  background: var(--primary);
+  color: #fff;
+}
+.move-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.section-num { 
+  font-size: 12px; 
+  font-weight: 700; 
+  padding: 3px 8px; 
+  background: #1a1a18; 
+  color: #fff; 
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.section-title {
+  flex: 1; 
+  font-size: 13.5px; 
+  font-weight: 600; 
+  line-height: 1.4;
+  padding: 4px 6px;
+  border: 1.5px dashed transparent;
+  border-radius: 5px;
+  outline: none;
+  word-break: break-word;
+  min-height: 22px;
+}
+.section-title:focus {
+  background: #fff;
+  border-color: var(--primary);
+}
+.section-count { 
+  font-size: 11px; 
+  color: var(--ink2);
+  flex-shrink: 0;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+.section-toggle { 
+  font-size: 12px; 
+  color: var(--ink2); 
+  transition: transform 0.2s;
+  cursor: pointer;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+.section.expanded .section-toggle { transform: rotate(180deg); }
+
+.section-body { display: none; padding: 8px 10px 10px; }
+.section.expanded .section-body { display: block; }
+
+.shot-direction {
+  background: #FFF8ED;
+  border-left: 3px solid #D97706;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: #633806;
+}
+.shot-direction strong { color: #854F0B; }
+
+.take {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+  border: 1px solid var(--line);
+}
+.take-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.take-id {
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--ink);
+  color: #fff;
+  padding: 3px 9px;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+.take-shot {
+  font-size: 12px;
+  font-weight: 700;
+  background: #fff;
+  border: 1.5px solid var(--shot);
+  color: var(--shot);
+  border-radius: 6px;
+  padding: 4px 8px;
+  width: 70px;
+  font-family: inherit;
+  text-align: center;
+}
+.take-shot:focus {
+  outline: 2px solid var(--shot);
+  outline-offset: -1px;
+}
+.take-shot::placeholder {
+  color: #B8B5AC;
+  font-weight: 400;
+  font-size: 11px;
+}
+.take-camera {
+  font-size: 12px;
+  font-weight: 600;
+  background: #fff;
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  padding: 4px 8px;
+  width: 80px;
+  font-family: inherit;
+}
+.take-camera:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: -1px;
+  border-color: var(--primary);
+}
+.take-camera::placeholder {
+  color: #B8B5AC;
+  font-weight: 400;
+  font-size: 11px;
+}
+.take-status {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  min-width: 100%;
+  margin-top: 6px;
+}
+.btn-status {
+  flex: 1;
+  padding: 8px 4px;
+  border: 1.5px solid var(--line);
+  background: #fff;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-status.active.ok { background: var(--ok); color: #fff; border-color: var(--ok); }
+.btn-status.active.ng { background: var(--ng); color: #fff; border-color: var(--ng); }
+.btn-status.active.bk { background: var(--bk); color: #fff; border-color: var(--bk); }
+
+.take-star {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+.btn-star {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  padding: 4px;
+  cursor: pointer;
+  opacity: 0.3;
+}
+.btn-star.active { opacity: 1; }
+
+.take-input {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: none;
+  min-height: 50px;
+  margin-bottom: 6px;
+}
+.take-input:focus { outline: 2px solid var(--primary); outline-offset: -2px; }
+.take-input.note { min-height: 40px; background: #FFFBEB; }
+
+.take-btns {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+}
+.btn-action {
+  flex: 1;
+  padding: 7px;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-action.danger { color: var(--ng); }
+
+.btn-add {
+  width: 100%;
+  padding: 12px;
+  margin-top: 4px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-add:active { transform: scale(0.98); }
+
+.toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid var(--line);
+  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+  z-index: 200;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+}
+.btn-tool {
+  flex: 1;
+  padding: 11px;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-tool.primary { background: var(--ok); color: #fff; border-color: var(--ok); }
+.btn-tool.warn { color: var(--ng); border-color: var(--ng); }
+
+.tip {
+  background: #FFFBEB;
+  border-left: 3px solid #D97706;
+  padding: 10px 12px;
+  margin: 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #633806;
+}
+.tip strong { color: #854F0B; }
+
+.modal-bg {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  display: none; align-items: center; justify-content: center; z-index: 1000;
+  padding: 20px;
+}
+.modal-bg.show { display: flex; }
+.modal {
+  background: #fff; border-radius: 12px; padding: 20px; max-width: 320px; width: 100%;
+}
+.modal-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.modal-body { font-size: 13px; color: var(--ink2); line-height: 1.6; margin-bottom: 16px; }
+.modal-btns { display: flex; gap: 8px; }
+.modal-btn { flex: 1; padding: 10px; border: 1px solid var(--line); background: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; }
+.modal-btn.danger { background: var(--ng); color: #fff; border-color: var(--ng); }
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-title">EP3《硬著頭皮都要聊！談錢傷感情？不談才是傷關係》</div>
+  <div class="header-sub">場記表｜<span id="dateLabel"></span></div>
+</div>
+
+<div class="stats">
+  <div class="stat shot"><div class="stat-n" id="cntShot">0</div><div class="stat-l">已拍順序</div></div>
+  <div class="stat ok"><div class="stat-n" id="cntOK">0</div><div class="stat-l">⭕ OK</div></div>
+  <div class="stat ng"><div class="stat-n" id="cntNG">0</div><div class="stat-l">❌ NG</div></div>
+  <div class="stat bk"><div class="stat-n" id="cntBK">0</div><div class="stat-l">🔺 備用</div></div>
+  <div class="stat gold"><div class="stat-n" id="cntGold">0</div><div class="stat-l">🌟 黃金</div></div>
+</div>
+
+<div class="tip">
+  💡 <strong>排序段落</strong>：每段標題左邊有 ▲ ▼ 按鈕，點一下移動一格。跳拍順序、合併段落都靠這調整<br>
+  💡 <strong>拍攝順序號</strong>：藍框欄位填 #01、#02⋯記錄是第幾條拍的；合併拍兩段在備註欄寫即可
+</div>
+
+<div id="sections"></div>
+
+<div class="toolbar">
+  <button class="btn-tool primary" onclick="exportCSV()">📥 匯出 CSV</button>
+  <button class="btn-tool" onclick="expandAll()">展開全部</button>
+  <button class="btn-tool warn" onclick="showResetModal()">🗑️ 清除</button>
+</div>
+
+<div class="modal-bg" id="resetModal">
+  <div class="modal">
+    <div class="modal-title">確定要清除所有紀錄？</div>
+    <div class="modal-body">這個動作無法復原。建議先匯出 CSV 留底再清除。</div>
+    <div class="modal-btns">
+      <button class="modal-btn" onclick="closeResetModal()">取消</button>
+      <button class="modal-btn danger" onclick="resetAll()">確定清除</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DEFAULT_SECTIONS = [
+  { id: "A1", zone: "A", title: "開場（愷愷單講）", direction: "標題：硬著頭皮都要聊！談錢傷感情？不談才是傷關係" },
+  { id: "A2", zone: "A", title: "Q1 家族出國誰付帳（苡寧主答→三人）", direction: "苡寧先答，自然帶出兄弟姐妹算錢的情境" },
+  { id: "A3", zone: "A", title: "補 QA：你們有跟爸媽或兄弟姐妹借過錢嗎？", direction: "" },
+  { id: "A4", zone: "A", title: "🟧 接題:知道爸媽帳戶在哪嗎？", direction: "⚠️ 直球問,沉默超過 3 秒不要打破——是黃金 take" },
+  { id: "A5", zone: "A", title: "Q2 報稅才發現對爸媽不熟（毓筠主答）", direction: "毓筠:第一次報稅才知道可以撫養媽媽" },
+  { id: "A6", zone: "A", title: "愷愷「我浪費十年」", direction: "★ 行員反差金句段,可拉長拍" },
+  { id: "A7", zone: "A", title: "苡寧聊下一代教養 + 三人切角對照", direction: "" },
+  { id: "A8", zone: "A", title: "「我們不是小康家庭」笑點", direction: "輕鬆笑點過場;不深聊月薪/階級" },
+  { id: "A9", zone: "A", title: "世代理財觀(ETF vs 定存)", direction: "" },
+  { id: "A10", zone: "A", title: "(保留:可現場加段)", direction: "" },
+  { id: "B1", zone: "B", title: "iLEO App 開場(愷愷)", direction: "愷愷右邊留 1/2 顯示 iLEO App｜「第一銀行 iLEO App 就是讓你放心跟信賴的好工具!」" },
+  { id: "B2", zone: "B", title: "iLEO 通知功能(毓筠)", direction: "毓筠右邊留 1/2 顯示 iLEO App;說明通知用畫面動畫輔助" },
+  { id: "B3", zone: "B", title: "iLEO 安全管家(苡寧)", direction: "畫面轉場 → 苡寧左邊留 1/2 顯示 iLEO App" },
+  { id: "B4", zone: "B", title: "iLEO 2% 活存 + 跨轉 + 防詐(毓筠)", direction: "畫面以 CC 為主,正中間 CUT" },
+  { id: "B5", zone: "B", title: "神指對決開場 — CC 滑手指", direction: "CC 在座位上滑手指;鏡頭切換窗邊(苡寧擦窗戶)、白板(恩愷擦白板)看著 CC" },
+  { id: "B6", zone: "B", title: "神指對決 — 三人加入滑＋桌面露存摺套", direction: "CC 繼續滑,後面兩人加入座位上滑動手指;鏡頭切換桌面露出小粉獅存摺護照套" },
+  { id: "A11", zone: "A", title: "收尾：苡寧「談錢傷感情嗎」", direction: "「也許深呼吸一下,不要立刻繃緊神經」" },
+  { id: "A12", zone: "A", title: "收尾：毓筠「成為他們的提示詞」", direction: "「你今天的長輩圖我看了唷？」「最近詐騙很多～要小心唷！」" },
+  { id: "A13", zone: "A", title: "結尾 CTA(愷愷)", direction: "用遊戲開啟互動＋小粉獅贈品引導＋訂閱按讚分享" },
+  { id: "EX1", zone: "EX", title: "三人 reaction 鏡頭", direction: "每一段主要對話完,補拍另外兩人的反應" },
+  { id: "EX2", zone: "EX", title: "空鏡(桌面、場景、贈品)", direction: "小粉獅存摺護照套、桌面擺設、iLEO App 手機畫面特寫" },
+  { id: "EX3", zone: "EX", title: "現場加拍(依需求)", direction: "現場想到再加" },
+];
+
+const ZONE_INFO = {
+  A: { label: "A 區", name: "正片拍攝" },
+  B: { label: "B 區", name: "產品推廣 (iLEO App + 社群活動)" },
+  EX: { label: "EX 區", name: "補拍 (reaction・空鏡・產品特寫)" },
+};
+
+const STORAGE_KEY = "ep3_shooting_log_v5";
+let data = {};
+let sectionTitles = {};
+let sectionOrder = [];
+
+function load() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      data = parsed.data || {};
+      sectionTitles = parsed.titles || {};
+      sectionOrder = parsed.order || [];
+    }
+  } catch(e) {
+    data = {};
+    sectionTitles = {};
+    sectionOrder = [];
+  }
+  DEFAULT_SECTIONS.forEach(s => {
+    if (!data[s.id]) {
+      data[s.id] = { takes: [{ id: 1, shot: "", camera: "", status: "", star: 0, content: "", note: "" }] };
+    }
+    if (!sectionTitles[s.id]) {
+      sectionTitles[s.id] = s.title;
+    }
+    if (!sectionOrder.includes(s.id)) {
+      sectionOrder.push(s.id);
+    }
+  });
+}
+
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ data, titles: sectionTitles, order: sectionOrder }));
+}
+
+function getSectionInfo(id) {
+  return DEFAULT_SECTIONS.find(s => s.id === id);
+}
+
+function updateDateLabel() {
+  const d = new Date();
+  const dateStr = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
+  document.getElementById('dateLabel').textContent = dateStr;
+}
+
+function updateStats() {
+  let ok = 0, ng = 0, bk = 0, gold = 0, shots = new Set();
+  sectionOrder.forEach(id => {
+    (data[id]?.takes || []).forEach(t => {
+      if (t.status === "ok") ok++;
+      if (t.status === "ng") ng++;
+      if (t.status === "bk") bk++;
+      if (t.star >= 3) gold++;
+      if (t.shot && t.shot.trim()) shots.add(t.shot.trim());
+    });
+  });
+  document.getElementById('cntOK').textContent = ok;
+  document.getElementById('cntNG').textContent = ng;
+  document.getElementById('cntBK').textContent = bk;
+  document.getElementById('cntGold').textContent = gold;
+  document.getElementById('cntShot').textContent = shots.size;
+}
+
+function render(highlightId) {
+  const expanded = {};
+  sectionOrder.forEach(id => {
+    const el = document.getElementById(`sec-${id}`);
+    expanded[id] = el && el.classList.contains('expanded');
+  });
+  
+  const root = document.getElementById('sections');
+  root.innerHTML = '';
+  
+  // 統計每個 zone（依目前順序中各 section 的原始 zone 屬性）
+  const zoneStats = { A: { ok: 0, total: 0 }, B: { ok: 0, total: 0 }, EX: { ok: 0, total: 0 } };
+  sectionOrder.forEach(id => {
+    const info = getSectionInfo(id);
+    if (!info) return;
+    const takes = data[id]?.takes || [];
+    zoneStats[info.zone].total += takes.length;
+    zoneStats[info.zone].ok += takes.filter(t => t.status === "ok").length;
+  });
+  
+  // 渲染：依現有順序遍歷，遇到 zone 變化就插入該 zone 的標頭
+  let lastZone = null;
+  sectionOrder.forEach((id, idx) => {
+    const info = getSectionInfo(id);
+    if (!info) return;
+    
+    if (info.zone !== lastZone) {
+      const z = ZONE_INFO[info.zone];
+      const stat = zoneStats[info.zone];
+      const zh = document.createElement('div');
+      zh.className = `zone-head ${info.zone}`;
+      zh.innerHTML = `
+        <span class="zone-label">${z.label}</span>
+        <span class="zone-name">${z.name}</span>
+        <span class="zone-count">${stat.ok}/${stat.total}</span>
+      `;
+      root.appendChild(zh);
+      lastZone = info.zone;
+    }
+    
+    const sec = document.createElement('div');
+    sec.className = 'section' + (expanded[id] ? ' expanded' : '') + (id === highlightId ? ' moved' : '');
+    sec.id = `sec-${id}`;
+    sec.dataset.id = id;
+    
+    const sectionTakes = (data[id]?.takes || []);
+    const takesCount = sectionTakes.length;
+    const okInSection = sectionTakes.filter(t => t.status === "ok").length;
+    const currentTitle = sectionTitles[id] || info.title;
+    const isFirst = idx === 0;
+    const isLast = idx === sectionOrder.length - 1;
+    
+    sec.innerHTML = `
+      <div class="section-head ${info.zone}">
+        <div class="move-btns">
+          <button class="move-btn" onclick="moveSection('${id}', -1)" ${isFirst ? 'disabled' : ''} title="向上移動">▲</button>
+          <button class="move-btn" onclick="moveSection('${id}', 1)" ${isLast ? 'disabled' : ''} title="向下移動">▼</button>
+        </div>
+        <span class="section-num">${id}</span>
+        <div class="section-title" contenteditable="true" data-secid="${id}" 
+             onblur="updateSectionTitle('${id}', this.textContent)"
+             onkeydown="handleTitleKeydown(event, this)">${escapeHtml(currentTitle)}</div>
+        <span class="section-count" onclick="toggleSection('${id}')">${okInSection}/${takesCount}</span>
+        <span class="section-toggle" onclick="toggleSection('${id}')">▼</span>
+      </div>
+      <div class="section-body" id="body-${id}">
+        ${info.direction ? `<div class="shot-direction"><strong>拍攝指示：</strong>${escapeHtml(info.direction)}</div>` : ''}
+        ${sectionTakes.map((t, i) => renderTake(id, t, i)).join('')}
+        <button class="btn-add" onclick="addTake('${id}')">＋ 新增一條 Take</button>
+      </div>
+    `;
+    
+    root.appendChild(sec);
+  });
+  
+  updateStats();
+  
+  // 滾到剛剛移動的段落
+  if (highlightId) {
+    setTimeout(() => {
+      const el = document.getElementById(`sec-${highlightId}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 50);
+  }
+}
+
+function renderTake(secId, take, idx) {
+  const takeId = `${secId}-${take.id}`;
+  return `
+    <div class="take" id="take-${takeId}">
+      <div class="take-head">
+        <span class="take-id">${takeId}</span>
+        <input type="text" class="take-shot" placeholder="#拍序" value="${escapeHtml(take.shot || '')}" 
+               onchange="updateField('${secId}', ${idx}, 'shot', this.value)">
+        <input type="text" class="take-camera" placeholder="鏡頭Take" value="${escapeHtml(take.camera || '')}" 
+               onchange="updateField('${secId}', ${idx}, 'camera', this.value)">
+        <div class="take-status">
+          <button class="btn-status ok ${take.status==='ok'?'active':''}" onclick="setStatus('${secId}', ${idx}, 'ok')">⭕ OK</button>
+          <button class="btn-status ng ${take.status==='ng'?'active':''}" onclick="setStatus('${secId}', ${idx}, 'ng')">❌ NG</button>
+          <button class="btn-status bk ${take.status==='bk'?'active':''}" onclick="setStatus('${secId}', ${idx}, 'bk')">🔺 備用</button>
+        </div>
+      </div>
+      <div class="take-star">
+        ${[1,2,3].map(n => `<button class="btn-star ${take.star >= n ? 'active' : ''}" onclick="setStar('${secId}', ${idx}, ${n})">🌟</button>`).join('')}
+        <span style="font-size:10px;color:#888;align-self:center;margin-left:4px">${take.star >= 3 ? '黃金' : take.star >= 2 ? '不錯' : take.star >= 1 ? '可用' : '未評'}</span>
+      </div>
+      <textarea class="take-input" placeholder="內容摘要(聊到哪、講了什麼;合併拍可寫:「同 A6-2」)" onchange="updateField('${secId}', ${idx}, 'content', this.value)">${escapeHtml(take.content || '')}</textarea>
+      <textarea class="take-input note" placeholder="現場注意事項 / 後製備註" onchange="updateField('${secId}', ${idx}, 'note', this.value)">${escapeHtml(take.note || '')}</textarea>
+      <div class="take-btns">
+        <button class="btn-action" onclick="duplicateTake('${secId}', ${idx})">複製此條</button>
+        <button class="btn-action danger" onclick="deleteTake('${secId}', ${idx})">刪除</button>
+      </div>
+    </div>
+  `;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// ─── 上下移動段落 ───
+function moveSection(id, direction) {
+  const idx = sectionOrder.indexOf(id);
+  if (idx < 0) return;
+  const newIdx = idx + direction;
+  if (newIdx < 0 || newIdx >= sectionOrder.length) return;
+  // 交換位置
+  [sectionOrder[idx], sectionOrder[newIdx]] = [sectionOrder[newIdx], sectionOrder[idx]];
+  save();
+  render(id);
+}
+
+// ─── 一般功能 ───
+function toggleSection(id) {
+  document.getElementById(`sec-${id}`)?.classList.toggle('expanded');
+}
+
+function updateSectionTitle(id, newTitle) {
+  newTitle = newTitle.trim();
+  if (!newTitle) {
+    const info = getSectionInfo(id);
+    sectionTitles[id] = info ? info.title : id;
+    render();
+  } else {
+    sectionTitles[id] = newTitle;
+  }
+  save();
+}
+
+function handleTitleKeydown(e, el) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    el.blur();
+  }
+}
+
+function setStatus(secId, idx, status) {
+  const take = data[secId].takes[idx];
+  take.status = take.status === status ? '' : status;
+  save();
+  render();
+  document.getElementById(`sec-${secId}`)?.classList.add('expanded');
+}
+
+function setStar(secId, idx, n) {
+  const take = data[secId].takes[idx];
+  take.star = take.star === n ? n - 1 : n;
+  save();
+  render();
+  document.getElementById(`sec-${secId}`)?.classList.add('expanded');
+}
+
+function updateField(secId, idx, field, value) {
+  data[secId].takes[idx][field] = value;
+  save();
+  updateStats();
+}
+
+function addTake(secId) {
+  const takes = data[secId].takes;
+  const nextId = takes.length > 0 ? Math.max(...takes.map(t => t.id)) + 1 : 1;
+  takes.push({ id: nextId, shot: "", camera: "", status: "", star: 0, content: "", note: "" });
+  save();
+  render();
+  document.getElementById(`sec-${secId}`)?.classList.add('expanded');
+}
+
+function duplicateTake(secId, idx) {
+  const takes = data[secId].takes;
+  const original = takes[idx];
+  const nextId = Math.max(...takes.map(t => t.id)) + 1;
+  takes.splice(idx + 1, 0, { 
+    id: nextId, 
+    shot: "",
+    camera: "",
+    status: "", 
+    star: 0, 
+    content: original.content + " (重拍)", 
+    note: ""
+  });
+  save();
+  render();
+  document.getElementById(`sec-${secId}`)?.classList.add('expanded');
+}
+
+function deleteTake(secId, idx) {
+  if (data[secId].takes.length <= 1) {
+    alert("至少要保留一條 take");
+    return;
+  }
+  if (!confirm("確定刪除這條 take？")) return;
+  data[secId].takes.splice(idx, 1);
+  save();
+  render();
+  document.getElementById(`sec-${secId}`)?.classList.add('expanded');
+}
+
+function expandAll() {
+  const allIds = sectionOrder;
+  const allExpanded = allIds.every(id => 
+    document.getElementById(`sec-${id}`)?.classList.contains('expanded')
+  );
+  allIds.forEach(id => {
+    const sec = document.getElementById(`sec-${id}`);
+    if (!sec) return;
+    if (allExpanded) sec.classList.remove('expanded');
+    else sec.classList.add('expanded');
+  });
+}
+
+function exportCSV() {
+  const rows = [
+    ["順序", "區", "場次", "Take", "拍序", "鏡頭Take", "OK/NG", "星等", "內容摘要", "現場備註"]
+  ];
+  
+  sectionOrder.forEach((id, sectionIndex) => {
+    const info = getSectionInfo(id);
+    if (!info) return;
+    const takes = data[id]?.takes || [];
+    const title = sectionTitles[id] || info.title;
+    
+    rows.push([sectionIndex + 1, info.zone, `${id} - ${title}`, "", "", "", "", "", "", ""]);
+    
+    takes.forEach(t => {
+      const statusLabel = t.status === "ok" ? "⭕ OK" 
+        : t.status === "ng" ? "❌ NG"
+        : t.status === "bk" ? "🔺 備用" : "";
+      const starLabel = "🌟".repeat(t.star);
+      rows.push([
+        "",
+        info.zone,
+        id,
+        `${id}-${t.id}`,
+        t.shot || "",
+        t.camera || "",
+        statusLabel,
+        starLabel,
+        t.content || "",
+        t.note || ""
+      ]);
+    });
+  });
+  
+  const BOM = "\uFEFF";
+  const csv = BOM + rows.map(row => 
+    row.map(cell => {
+      const s = String(cell).replace(/"/g, '""');
+      return `"${s}"`;
+    }).join(",")
+  ).join("\r\n");
+  
+  const d = new Date();
+  const dateStr = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+  const filename = `EP3_場記_${dateStr}.csv`;
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 100);
+}
+
+function showResetModal() {
+  document.getElementById('resetModal').classList.add('show');
+}
+function closeResetModal() {
+  document.getElementById('resetModal').classList.remove('show');
+}
+function resetAll() {
+  data = {};
+  sectionTitles = {};
+  sectionOrder = [];
+  DEFAULT_SECTIONS.forEach(s => {
+    data[s.id] = { takes: [{ id: 1, shot: "", camera: "", status: "", star: 0, content: "", note: "" }] };
+    sectionTitles[s.id] = s.title;
+    sectionOrder.push(s.id);
+  });
+  save();
+  render();
+  closeResetModal();
+}
+
+updateDateLabel();
+load();
+render();
+const firstId = sectionOrder[0];
+if (firstId) document.getElementById(`sec-${firstId}`)?.classList.add('expanded');
+
+</script>
+
+</body>
+</html>
