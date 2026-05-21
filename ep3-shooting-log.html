@@ -6,843 +6,1114 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="EP3場記">
-<title>EP3 場記表</title>
+<title>EP3 場記表 v8</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 :root {
-  --bg: #f5f4f0;
-  --card: #ffffff;
-  --ink: #1a1a18;
-  --ink2: #5f5e5a;
-  --line: #e0ddd4;
-  --ok: #1D9E75;
-  --ng: #E24B4A;
-  --bk: #EF9F27;
-  --gold: #D97706;
-  --primary: #534AB7;
-  --primary-bg: #EEEDFE;
-  --shot: #1D4FCC;
+  --bg: #f5f4f0; --card: #ffffff; --ink: #1a1a18; --ink2: #5f5e5a;
+  --line: #e0ddd4; --ok: #1D9E75; --ng: #E24B4A; --bk: #EF9F27;
+  --gold: #D97706; --primary: #534AB7; --shot: #1D4FCC;
+  --zone-a: #1D4FCC; --zone-b: #99192A; --zone-c: #4F6BCC; --zone-d: #4F7C4D;
 }
 html, body { background: var(--bg); color: var(--ink); font-family: -apple-system, "Helvetica Neue", "Noto Sans TC", sans-serif; min-height: 100vh; }
-body { padding-bottom: 100px; }
+body { padding-bottom: 110px; }
 
+/* ── 頂部標題 ── */
 .header {
-  background: var(--ink);
-  color: #fff;
-  padding: 12px 14px;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  background: #1a1a18; color: #fff; padding: 10px 14px;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  display: flex; align-items: center; gap: 8px;
 }
-.header-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; line-height: 1.4; }
-.header-sub { font-size: 11px; opacity: 0.7; }
+.header-title { font-size: 13px; font-weight: 700; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.header-meta { font-size: 11px; opacity: 0.7; }
 
+/* ── 統計列 ── */
 .stats {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 3px;
-  padding: 8px 10px;
-  background: #fff;
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px;
+  padding: 6px 10px; background: #fff;
   border-bottom: 1px solid var(--line);
-  position: sticky;
-  top: 56px;
-  z-index: 99;
+  position: sticky; top: 41px; z-index: 99;
 }
-.stat { text-align: center; padding: 6px 2px; border-radius: 8px; background: #f5f4f0; }
-.stat-n { font-size: 17px; font-weight: 700; line-height: 1; }
+.stat { text-align: center; padding: 5px 2px; border-radius: 6px; background: #f5f4f0; }
+.stat-n { font-size: 15px; font-weight: 700; line-height: 1; }
 .stat-l { font-size: 9px; color: var(--ink2); margin-top: 2px; }
+.stat.total .stat-n { color: var(--ink); }
 .stat.ok .stat-n { color: var(--ok); }
 .stat.ng .stat-n { color: var(--ng); }
-.stat.bk .stat-n { color: var(--bk); }
 .stat.gold .stat-n { color: var(--gold); }
-.stat.shot .stat-n { color: var(--shot); }
+.stat.pending .stat-n { color: var(--bk); }
 
-.zone-head {
-  margin: 16px 8px 4px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* ── 篩選列 ── */
+.filter-bar {
+  background: #fff; border-bottom: 1px solid var(--line);
+  padding: 6px 10px; display: flex; gap: 4px;
+  overflow-x: auto; white-space: nowrap;
+  position: sticky; top: 91px; z-index: 98;
 }
-.zone-head.A { background: linear-gradient(135deg, #1D6BCC 0%, #1D4FCC 100%); }
-.zone-head.B { background: linear-gradient(135deg, #CC2828 0%, #99192A 100%); }
-.zone-head.EX { background: linear-gradient(135deg, #4F7C4D 0%, #355937 100%); }
-.zone-label {
-  background: rgba(255,255,255,0.25);
-  padding: 2px 8px;
+.filter-chip {
+  flex-shrink: 0; padding: 5px 10px;
+  border: 1px solid var(--line); background: #fff;
   border-radius: 99px;
-  font-size: 11px;
-  letter-spacing: 0.5px;
+  font-size: 11px; font-weight: 600;
+  color: var(--ink2); cursor: pointer;
 }
-.zone-name { flex: 1; }
-.zone-count {
-  font-size: 11px;
-  opacity: 0.85;
+.filter-chip.active {
+  background: var(--ink); color: #fff; border-color: var(--ink);
 }
+.filter-chip.warn { color: var(--bk); border-color: var(--bk); }
+.filter-chip.warn.active { background: var(--bk); color: #fff; }
 
-/* ── 段落 ── */
-.section { background: #fff; margin: 6px 8px; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-.section.moved { 
-  animation: highlight 0.6s ease-out;
+/* ── 主新增按鈕 ── */
+.add-take-zone {
+  padding: 10px;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+  position: sticky; bottom: 78px; z-index: 50;
+  pointer-events: none;
 }
-@keyframes highlight {
-  0% { background: #EEEDFE; transform: scale(1.02); }
-  100% { background: #fff; transform: scale(1); }
-}
-.section-head {
-  padding: 8px 10px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  border-left: 4px solid;
-  user-select: none;
-}
-.section-head.A { border-color: #1D6BCC; background: #E8F0FE; }
-.section-head.B { border-color: #CC2828; background: #FCEBEB; }
-.section-head.EX { border-color: #4F7C4D; background: #E8F0E5; }
-
-.move-btns {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex-shrink: 0;
-}
-.move-btn {
-  width: 26px;
-  height: 18px;
-  border: none;
-  background: rgba(0,0,0,0.08);
-  border-radius: 4px;
-  font-size: 11px;
-  color: var(--ink);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  line-height: 1;
-}
-.move-btn:active {
-  background: var(--primary);
+.add-take-main {
+  background: linear-gradient(135deg, #1D9E75 0%, #157A5A 100%);
   color: #fff;
+  border: none;
+  padding: 16px;
+  border-radius: 14px;
+  font-size: 17px; font-weight: 700;
+  width: 100%;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(29, 158, 117, 0.35);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  pointer-events: auto;
 }
-.move-btn:disabled {
-  opacity: 0.25;
-  cursor: not-allowed;
-}
+.add-take-main:active { transform: scale(0.98); }
 
-.section-num { 
-  font-size: 12px; 
-  font-weight: 700; 
-  padding: 3px 8px; 
-  background: #1a1a18; 
-  color: #fff; 
-  border-radius: 4px;
-  flex-shrink: 0;
-}
-.section-title {
-  flex: 1; 
-  font-size: 13.5px; 
-  font-weight: 600; 
-  line-height: 1.4;
-  padding: 4px 6px;
-  border: 1.5px dashed transparent;
-  border-radius: 5px;
-  outline: none;
-  word-break: break-word;
-  min-height: 22px;
-}
-.section-title:focus {
-  background: #fff;
-  border-color: var(--primary);
-}
-.section-count { 
-  font-size: 11px; 
+/* ── Take 卡片 ── */
+.takes-area { padding: 10px; }
+.takes-empty {
+  text-align: center; padding: 40px 20px;
   color: var(--ink2);
-  flex-shrink: 0;
-  cursor: pointer;
-  padding: 2px 6px;
 }
-.section-toggle { 
-  font-size: 12px; 
-  color: var(--ink2); 
-  transition: transform 0.2s;
-  cursor: pointer;
-  padding: 0 4px;
-  flex-shrink: 0;
-}
-.section.expanded .section-toggle { transform: rotate(180deg); }
-
-.section-body { display: none; padding: 8px 10px 10px; }
-.section.expanded .section-body { display: block; }
-
-.shot-direction {
-  background: #FFF8ED;
-  border-left: 3px solid #D97706;
-  padding: 8px 10px;
-  margin-bottom: 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  line-height: 1.55;
-  color: #633806;
-}
-.shot-direction strong { color: #854F0B; }
+.takes-empty-icon { font-size: 36px; margin-bottom: 10px; }
+.takes-empty-text { font-size: 14px; line-height: 1.6; }
+.takes-empty-hint { font-size: 12px; color: var(--ink2); margin-top: 8px; opacity: 0.7; }
 
 .take {
-  background: var(--bg);
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 8px;
-  border: 1px solid var(--line);
+  background: #fff; border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  border-left: 4px solid transparent;
 }
+.take.gold {
+  background: linear-gradient(180deg, #FFFBEB 0%, #fff 30%);
+  border-color: #FCD34D;
+}
+.take.pending {
+  background: #FFFCF3;
+  border-color: var(--bk);
+}
+.take.ok-state { border-color: var(--ok); }
+.take.ng-state { border-color: var(--ng); }
+.take.bk-state { border-color: var(--bk); }
+
+/* take head：流水號 + 狀態 + 拍序 + 鏡頭 */
 .take-head {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  display: flex; align-items: center; gap: 6px;
   margin-bottom: 8px;
   flex-wrap: wrap;
 }
-.take-id {
-  font-size: 13px;
-  font-weight: 700;
-  background: var(--ink);
-  color: #fff;
-  padding: 3px 9px;
-  border-radius: 99px;
+.take-num {
+  font-size: 17px; font-weight: 800;
+  background: var(--ink); color: #fff;
+  padding: 3px 11px; border-radius: 99px;
+  font-variant-numeric: tabular-nums;
   flex-shrink: 0;
 }
-.take-shot {
-  font-size: 12px;
-  font-weight: 700;
-  background: #fff;
-  border: 1.5px solid var(--shot);
-  color: var(--shot);
+.take-status-quick {
+  display: flex; gap: 3px; flex: 1;
+}
+.btn-quick {
+  flex: 1; padding: 7px 4px;
+  border: 1.5px solid var(--line); background: #fff;
   border-radius: 6px;
-  padding: 4px 8px;
-  width: 70px;
-  font-family: inherit;
-  text-align: center;
+  font-size: 12px; font-weight: 700; cursor: pointer;
 }
-.take-shot:focus {
-  outline: 2px solid var(--shot);
-  outline-offset: -1px;
+.btn-quick.active.ok { background: var(--ok); color: #fff; border-color: var(--ok); }
+.btn-quick.active.ng { background: var(--ng); color: #fff; border-color: var(--ng); }
+.btn-quick.active.bk { background: var(--bk); color: #fff; border-color: var(--bk); }
+
+/* 第二列：拍序、鏡頭、星等 */
+.take-line2 {
+  display: flex; align-items: center; gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
 }
-.take-shot::placeholder {
-  color: #B8B5AC;
-  font-weight: 400;
-  font-size: 11px;
+.input-mini {
+  font-size: 12px; font-weight: 600;
+  background: #fff; border: 1.5px solid var(--line);
+  border-radius: 6px; padding: 5px 8px;
+  width: 75px; font-family: inherit;
 }
-.take-camera {
-  font-size: 12px;
-  font-weight: 600;
-  background: #fff;
-  border: 1.5px solid var(--line);
-  border-radius: 6px;
-  padding: 4px 8px;
-  width: 80px;
-  font-family: inherit;
-}
-.take-camera:focus {
-  outline: 2px solid var(--primary);
-  outline-offset: -1px;
-  border-color: var(--primary);
-}
-.take-camera::placeholder {
-  color: #B8B5AC;
-  font-weight: 400;
-  font-size: 11px;
-}
-.take-status {
-  display: flex;
-  gap: 4px;
-  flex: 1;
-  min-width: 100%;
-  margin-top: 6px;
-}
-.btn-status {
-  flex: 1;
-  padding: 8px 4px;
-  border: 1.5px solid var(--line);
-  background: #fff;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.btn-status.active.ok { background: var(--ok); color: #fff; border-color: var(--ok); }
-.btn-status.active.ng { background: var(--ng); color: #fff; border-color: var(--ng); }
-.btn-status.active.bk { background: var(--bk); color: #fff; border-color: var(--bk); }
+.input-mini.shot { border-color: var(--shot); color: var(--shot); text-align: center; }
+.input-mini:focus { outline: 2px solid var(--primary); outline-offset: -1px; border-color: var(--primary); }
+.input-mini::placeholder { color: #B8B5AC; font-weight: 400; font-size: 11px; }
 
 .take-star {
-  display: flex;
-  gap: 2px;
-  margin-bottom: 6px;
+  display: flex; gap: 1px;
 }
 .btn-star {
-  background: transparent;
-  border: none;
-  font-size: 16px;
-  padding: 4px;
-  cursor: pointer;
-  opacity: 0.3;
+  background: transparent; border: none;
+  font-size: 15px; padding: 3px;
+  cursor: pointer; opacity: 0.3;
 }
 .btn-star.active { opacity: 1; }
+.star-label {
+  font-size: 10px; color: var(--ink2);
+  align-self: center; margin-left: 2px;
+}
 
-.take-input {
-  width: 100%;
+/* 段落標籤區 */
+.tags-area {
+  background: #FAFAF7;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 8px;
   border: 1px solid var(--line);
-  background: #fff;
-  border-radius: 6px;
-  padding: 8px 10px;
-  font-size: 14px;
-  font-family: inherit;
-  resize: none;
-  min-height: 50px;
+}
+.tags-label {
+  font-size: 10px; font-weight: 700;
+  color: var(--ink2); letter-spacing: 0.5px;
   margin-bottom: 6px;
 }
-.take-input:focus { outline: 2px solid var(--primary); outline-offset: -2px; }
-.take-input.note { min-height: 40px; background: #FFFBEB; }
-
-.take-btns {
-  display: flex;
-  gap: 6px;
-  margin-top: 6px;
+.tags-list {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  align-items: center;
 }
-.btn-action {
-  flex: 1;
-  padding: 7px;
-  border: 1px solid var(--line);
-  background: #fff;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
+.tag-chip {
+  font-size: 11px; font-weight: 700;
+  padding: 4px 9px; border-radius: 99px;
+  background: var(--ink); color: #fff;
+  display: inline-flex; align-items: center; gap: 4px;
   cursor: pointer;
+}
+.tag-chip .x {
+  font-size: 11px; opacity: 0.7;
+}
+.tag-chip.A { background: var(--zone-a); }
+.tag-chip.B { background: var(--zone-b); }
+.tag-chip.C { background: var(--zone-c); }
+.tag-chip.D { background: var(--zone-d); }
+.tag-chip.custom { background: var(--ink2); }
+
+.btn-add-tag {
+  font-size: 11px; font-weight: 700;
+  padding: 4px 10px; border-radius: 99px;
+  background: #fff;
+  border: 1.5px dashed var(--ink2);
+  color: var(--ink2); cursor: pointer;
+}
+.btn-add-tag:active { background: #f5f4f0; }
+.no-tags-hint {
+  font-size: 11px; color: var(--bk); font-weight: 600;
+}
+
+.take-input {
+  width: 100%; border: 1px solid var(--line); background: #fff;
+  border-radius: 6px; padding: 8px 10px;
+  font-size: 14px; font-family: inherit;
+  resize: none; min-height: 50px; margin-bottom: 6px;
+}
+.take-input:focus { outline: 2px solid var(--primary); outline-offset: -2px; }
+.take-input.note { min-height: 36px; background: #FFFBEB; }
+
+.take-btns { display: flex; gap: 6px; margin-top: 6px; }
+.btn-action {
+  flex: 1; padding: 6px;
+  border: 1px solid var(--line); background: #fff;
+  border-radius: 6px;
+  font-size: 11px; font-weight: 600; cursor: pointer;
 }
 .btn-action.danger { color: var(--ng); }
 
-.btn-add {
-  width: 100%;
-  padding: 12px;
-  margin-top: 4px;
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.btn-add:active { transform: scale(0.98); }
-
+/* 底部工具列 */
 .toolbar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #fff;
-  border-top: 1px solid var(--line);
-  padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-  display: flex;
-  gap: 8px;
-  z-index: 200;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: #fff; border-top: 1px solid var(--line);
+  padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+  display: flex; gap: 6px; z-index: 200;
   box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
 }
 .btn-tool {
-  flex: 1;
-  padding: 11px;
-  border: 1px solid var(--line);
-  background: #fff;
+  flex: 1; padding: 10px 4px;
+  border: 1px solid var(--line); background: #fff;
   border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
+  font-size: 12px; font-weight: 700; cursor: pointer;
 }
 .btn-tool.primary { background: var(--ok); color: #fff; border-color: var(--ok); }
 .btn-tool.warn { color: var(--ng); border-color: var(--ng); }
 
-.tip {
-  background: #FFFBEB;
-  border-left: 3px solid #D97706;
-  padding: 10px 12px;
-  margin: 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  line-height: 1.6;
-  color: #633806;
-}
-.tip strong { color: #854F0B; }
-
+/* ── 標籤選擇 Modal ── */
 .modal-bg {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-  display: none; align-items: center; justify-content: center; z-index: 1000;
-  padding: 20px;
+  position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+  display: none; align-items: flex-end; justify-content: center;
+  z-index: 1000;
 }
 .modal-bg.show { display: flex; }
 .modal {
-  background: #fff; border-radius: 12px; padding: 20px; max-width: 320px; width: 100%;
+  background: #fff; border-radius: 20px 20px 0 0;
+  width: 100%; max-width: 480px;
+  max-height: 85vh;
+  display: flex; flex-direction: column;
+  animation: slideUp 0.25s ease-out;
 }
-.modal-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-.modal-body { font-size: 13px; color: var(--ink2); line-height: 1.6; margin-bottom: 16px; }
-.modal-btns { display: flex; gap: 8px; }
-.modal-btn { flex: 1; padding: 10px; border: 1px solid var(--line); background: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; }
-.modal-btn.danger { background: var(--ng); color: #fff; border-color: var(--ng); }
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.modal-handle {
+  width: 40px; height: 4px;
+  background: #ccc; border-radius: 99px;
+  margin: 10px auto 0;
+}
+.modal-header {
+  padding: 12px 18px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.modal-title { font-size: 16px; font-weight: 700; }
+.modal-sub { font-size: 11px; color: var(--ink2); margin-top: 3px; }
+
+.zone-tabs {
+  display: flex; gap: 4px;
+  padding: 8px 12px 0;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.zone-tab {
+  flex: 1;
+  background: transparent; border: none;
+  padding: 8px 4px;
+  font-size: 12px; font-weight: 700;
+  color: var(--ink2); cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+}
+.zone-tab.active.A { color: var(--zone-a); border-color: var(--zone-a); }
+.zone-tab.active.B { color: var(--zone-b); border-color: var(--zone-b); }
+.zone-tab.active.C { color: var(--zone-c); border-color: var(--zone-c); }
+.zone-tab.active.D { color: var(--zone-d); border-color: var(--zone-d); }
+.zone-tab.custom { font-size: 11px; }
+.zone-tab.active.custom { color: var(--ink); border-color: var(--ink); }
+
+.modal-body {
+  flex: 1; overflow-y: auto;
+  padding: 8px 12px;
+}
+
+.section-pick-item {
+  background: #fff; border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px; margin-bottom: 6px;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  border-left-width: 4px;
+}
+.section-pick-item:active { background: #f5f4f0; }
+.section-pick-item.A { border-left-color: var(--zone-a); }
+.section-pick-item.B { border-left-color: var(--zone-b); }
+.section-pick-item.C { border-left-color: var(--zone-c); }
+.section-pick-item.D { border-left-color: var(--zone-d); }
+.section-pick-item.selected {
+  background: #E8F5F0; border-color: var(--ok);
+}
+.section-pick-num {
+  font-size: 11px; font-weight: 700;
+  padding: 3px 7px;
+  background: #1a1a18; color: #fff;
+  border-radius: 4px; flex-shrink: 0;
+}
+.section-pick-text { flex: 1; min-width: 0; }
+.section-pick-title {
+  font-size: 13px; font-weight: 600; line-height: 1.4;
+}
+.section-pick-desc {
+  font-size: 10.5px; color: var(--ink2); margin-top: 2px;
+  line-height: 1.4;
+}
+.section-pick-check {
+  font-size: 18px; color: var(--ok); flex-shrink: 0;
+}
+
+/* 新增自訂段落區 */
+.add-custom-row {
+  display: flex; gap: 6px; padding: 4px 0 12px;
+}
+.add-custom-input {
+  flex: 1; padding: 8px 10px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-size: 13px; font-family: inherit;
+}
+.add-custom-input:focus { outline: 2px solid var(--primary); border-color: var(--primary); }
+.btn-add-custom {
+  padding: 8px 14px;
+  background: var(--primary); color: #fff;
+  border: none; border-radius: 8px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+}
+
+.modal-footer {
+  padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  display: flex; gap: 8px;
+}
+.btn-modal-cancel {
+  flex: 1; padding: 11px;
+  background: #f5f4f0; border: none;
+  border-radius: 8px;
+  font-size: 13px; font-weight: 700;
+  color: var(--ink); cursor: pointer;
+}
+.btn-modal-done {
+  flex: 1; padding: 11px;
+  background: var(--ok); border: none;
+  border-radius: 8px;
+  font-size: 13px; font-weight: 700;
+  color: #fff; cursor: pointer;
+}
+
+/* 確認 Modal */
+.modal-bg.confirm { align-items: center; padding: 20px; }
+.modal-bg.confirm .modal { border-radius: 14px; max-width: 320px; animation: none; }
+.confirm-body { padding: 20px; }
+.confirm-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.confirm-text { font-size: 13px; color: var(--ink2); line-height: 1.6; margin-bottom: 16px; }
+.confirm-btns { display: flex; gap: 8px; }
+.confirm-btn { flex: 1; padding: 10px; border: 1px solid var(--line); background: #fff; border-radius: 6px; font-weight: 700; cursor: pointer; }
+.confirm-btn.danger { background: var(--ng); color: #fff; border-color: var(--ng); }
 
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-title">EP3《硬著頭皮都要聊！談錢傷感情？不談才是傷關係》</div>
-  <div class="header-sub">場記表｜<span id="dateLabel"></span></div>
+  <div class="header-title">🎬 EP3 場記｜<span id="todayDate"></span></div>
 </div>
 
 <div class="stats">
-  <div class="stat shot"><div class="stat-n" id="cntShot">0</div><div class="stat-l">已拍順序</div></div>
+  <div class="stat total"><div class="stat-n" id="cntTotal">0</div><div class="stat-l">總 Takes</div></div>
   <div class="stat ok"><div class="stat-n" id="cntOK">0</div><div class="stat-l">⭕ OK</div></div>
   <div class="stat ng"><div class="stat-n" id="cntNG">0</div><div class="stat-l">❌ NG</div></div>
-  <div class="stat bk"><div class="stat-n" id="cntBK">0</div><div class="stat-l">🔺 備用</div></div>
   <div class="stat gold"><div class="stat-n" id="cntGold">0</div><div class="stat-l">🌟 黃金</div></div>
+  <div class="stat pending"><div class="stat-n" id="cntPending">0</div><div class="stat-l">⚠ 待整理</div></div>
 </div>
 
-<div class="tip">
-  💡 <strong>排序段落</strong>：每段標題左邊有 ▲ ▼ 按鈕，點一下移動一格。跳拍順序、合併段落都靠這調整<br>
-  💡 <strong>拍攝順序號</strong>：藍框欄位填 #01、#02⋯記錄是第幾條拍的；合併拍兩段在備註欄寫即可
-</div>
+<div class="filter-bar" id="filterBar"></div>
 
-<div id="sections"></div>
+<div id="takesArea" class="takes-area"></div>
+
+<div class="add-take-zone">
+  <button class="add-take-main" onclick="quickAddTake()">
+    <span style="font-size:22px">＋</span>
+    <span>記一條 Take</span>
+  </button>
+</div>
 
 <div class="toolbar">
   <button class="btn-tool primary" onclick="exportCSV()">📥 匯出 CSV</button>
-  <button class="btn-tool" onclick="expandAll()">展開全部</button>
-  <button class="btn-tool warn" onclick="showResetModal()">🗑️ 清除</button>
+  <button class="btn-tool" onclick="showOverview()">📊 段落概覽</button>
+  <button class="btn-tool warn" onclick="showResetModal()">🗑️</button>
 </div>
 
-<div class="modal-bg" id="resetModal">
+<!-- 選段落標籤 Modal -->
+<div class="modal-bg" id="tagPickerModal">
   <div class="modal">
-    <div class="modal-title">確定要清除所有紀錄？</div>
-    <div class="modal-body">這個動作無法復原。建議先匯出 CSV 留底再清除。</div>
-    <div class="modal-btns">
-      <button class="modal-btn" onclick="closeResetModal()">取消</button>
-      <button class="modal-btn danger" onclick="resetAll()">確定清除</button>
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">勾選相關段落</div>
+      <div class="modal-sub">一條 take 可同時涵蓋多段；也可新增自訂段落</div>
+    </div>
+    <div class="zone-tabs" id="zoneTabs"></div>
+    <div class="modal-body" id="pickerBody"></div>
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" onclick="closeTagPicker()">取消</button>
+      <button class="btn-modal-done" onclick="confirmTagPicker()">完成</button>
+    </div>
+  </div>
+</div>
+
+<!-- 段落概覽 Modal -->
+<div class="modal-bg" id="overviewModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title">📊 段落拍攝概覽</div>
+      <div class="modal-sub">點選段落 → 篩選只看該段相關 takes</div>
+    </div>
+    <div class="modal-body" id="overviewBody"></div>
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" onclick="closeOverview()" style="flex:1">關閉</button>
+    </div>
+  </div>
+</div>
+
+<!-- 清除確認 -->
+<div class="modal-bg confirm" id="resetModal">
+  <div class="modal">
+    <div class="confirm-body">
+      <div class="confirm-title">確定要清除所有紀錄？</div>
+      <div class="confirm-text">這個動作無法復原。建議先匯出 CSV 留底再清除。</div>
+      <div class="confirm-btns">
+        <button class="confirm-btn" onclick="closeResetModal()">取消</button>
+        <button class="confirm-btn danger" onclick="resetAll()">確定清除</button>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
+// ─── 預設段落（可用作標籤） ───
 const DEFAULT_SECTIONS = [
-  { id: "A1", zone: "A", title: "開場（愷愷單講）", direction: "標題：硬著頭皮都要聊！談錢傷感情？不談才是傷關係" },
-  { id: "A2", zone: "A", title: "Q1 家族出國誰付帳（苡寧主答→三人）", direction: "苡寧先答，自然帶出兄弟姐妹算錢的情境" },
-  { id: "A3", zone: "A", title: "補 QA：你們有跟爸媽或兄弟姐妹借過錢嗎？", direction: "" },
-  { id: "A4", zone: "A", title: "🟧 接題:知道爸媽帳戶在哪嗎？", direction: "⚠️ 直球問,沉默超過 3 秒不要打破——是黃金 take" },
-  { id: "A5", zone: "A", title: "Q2 報稅才發現對爸媽不熟（毓筠主答）", direction: "毓筠:第一次報稅才知道可以撫養媽媽" },
-  { id: "A6", zone: "A", title: "愷愷「我浪費十年」", direction: "★ 行員反差金句段,可拉長拍" },
-  { id: "A7", zone: "A", title: "苡寧聊下一代教養 + 三人切角對照", direction: "" },
-  { id: "A8", zone: "A", title: "「我們不是小康家庭」笑點", direction: "輕鬆笑點過場;不深聊月薪/階級" },
-  { id: "A9", zone: "A", title: "世代理財觀(ETF vs 定存)", direction: "" },
-  { id: "A10", zone: "A", title: "(保留:可現場加段)", direction: "" },
-  { id: "B1", zone: "B", title: "iLEO App 開場(愷愷)", direction: "愷愷右邊留 1/2 顯示 iLEO App｜「第一銀行 iLEO App 就是讓你放心跟信賴的好工具!」" },
-  { id: "B2", zone: "B", title: "iLEO 通知功能(毓筠)", direction: "毓筠右邊留 1/2 顯示 iLEO App;說明通知用畫面動畫輔助" },
-  { id: "B3", zone: "B", title: "iLEO 安全管家(苡寧)", direction: "畫面轉場 → 苡寧左邊留 1/2 顯示 iLEO App" },
-  { id: "B4", zone: "B", title: "iLEO 2% 活存 + 跨轉 + 防詐(毓筠)", direction: "畫面以 CC 為主,正中間 CUT" },
-  { id: "B5", zone: "B", title: "神指對決開場 — CC 滑手指", direction: "CC 在座位上滑手指;鏡頭切換窗邊(苡寧擦窗戶)、白板(恩愷擦白板)看著 CC" },
-  { id: "B6", zone: "B", title: "神指對決 — 三人加入滑＋桌面露存摺套", direction: "CC 繼續滑,後面兩人加入座位上滑動手指;鏡頭切換桌面露出小粉獅存摺護照套" },
-  { id: "A11", zone: "A", title: "收尾：苡寧「談錢傷感情嗎」", direction: "「也許深呼吸一下,不要立刻繃緊神經」" },
-  { id: "A12", zone: "A", title: "收尾：毓筠「成為他們的提示詞」", direction: "「你今天的長輩圖我看了唷？」「最近詐騙很多～要小心唷！」" },
-  { id: "A13", zone: "A", title: "結尾 CTA(愷愷)", direction: "用遊戲開啟互動＋小粉獅贈品引導＋訂閱按讚分享" },
-  { id: "EX1", zone: "EX", title: "三人 reaction 鏡頭", direction: "每一段主要對話完,補拍另外兩人的反應" },
-  { id: "EX2", zone: "EX", title: "空鏡(桌面、場景、贈品)", direction: "小粉獅存摺護照套、桌面擺設、iLEO App 手機畫面特寫" },
-  { id: "EX3", zone: "EX", title: "現場加拍(依需求)", direction: "現場想到再加" },
+  { id: "A1", zone: "A", title: "開場（愷愷單講）", direction: "標題：硬著頭皮都要聊！" },
+  { id: "A2", zone: "A", title: "Q1 家族出國誰付帳", direction: "苡寧主答→三人" },
+  { id: "A3", zone: "A", title: "補 QA：跟爸媽或兄弟姐妹借過錢嗎？", direction: "" },
+  { id: "A4", zone: "A", title: "🟧 接題：知道爸媽帳戶在哪嗎？", direction: "⚠️ 沉默 3 秒不要打破" },
+  { id: "A5", zone: "A", title: "Q2 報稅才發現對爸媽不熟", direction: "毓筠主答" },
+  { id: "A6", zone: "A", title: "愷愷「我浪費十年」", direction: "★ 行員反差金句段" },
+  { id: "A7", zone: "A", title: "苡寧聊下一代教養", direction: "三人切角對照" },
+  { id: "A8", zone: "A", title: "「我們不是小康家庭」笑點", direction: "輕鬆笑點過場" },
+  { id: "A9", zone: "A", title: "世代理財觀（ETF vs 定存）", direction: "" },
+  { id: "A10", zone: "A", title: "（保留：可現場加段）", direction: "" },
+  { id: "B1", zone: "B", title: "iLEO App 開場（愷愷）", direction: "愷愷右邊留 1/2" },
+  { id: "B2", zone: "B", title: "iLEO 通知功能（毓筠）", direction: "毓筠右邊留 1/2" },
+  { id: "B3", zone: "B", title: "iLEO 安全管家（苡寧）", direction: "苡寧左邊留 1/2" },
+  { id: "B4", zone: "B", title: "iLEO 2% 活存", direction: "CC 為主，正中間 CUT" },
+  { id: "B5", zone: "B", title: "神指對決 — CC 滑手指", direction: "窗邊 / 白板" },
+  { id: "B6", zone: "B", title: "神指對決 — 三人加入滑", direction: "桌面露存摺套" },
+  { id: "C1", zone: "C", title: "收尾：苡寧「談錢傷感情嗎」", direction: "" },
+  { id: "C2", zone: "C", title: "收尾：毓筠「成為他們的提示詞」", direction: "" },
+  { id: "C3", zone: "C", title: "結尾 CTA（愷愷）", direction: "" },
+  { id: "D1", zone: "D", title: "三人 reaction 鏡頭", direction: "" },
+  { id: "D2", zone: "D", title: "空鏡（桌面、贈品）", direction: "" },
+  { id: "D3", zone: "D", title: "現場加拍", direction: "" },
 ];
 
-const ZONE_INFO = {
-  A: { label: "A 區", name: "正片拍攝" },
-  B: { label: "B 區", name: "產品推廣 (iLEO App + 社群活動)" },
-  EX: { label: "EX 區", name: "補拍 (reaction・空鏡・產品特寫)" },
+const ZONES = [
+  { id: "A", name: "正片", color: "A" },
+  { id: "B", name: "產品", color: "B" },
+  { id: "C", name: "收尾", color: "C" },
+  { id: "D", name: "EX", color: "D" },
+];
+
+const STORAGE_KEY = "ep3_log_v8";
+
+let state = {
+  takes: [],            // [{id, tags:[sectionId], status, star, content, note, shot, camera}]
+  customSections: [],   // 使用者新增的自訂段落 {id, title}
+  sectionTitles: {},    // 段落標題覆寫
+  nextTakeNum: 1,
+  filter: "all",        // all / ok / ng / gold / pending / no-tag / [sectionId]
 };
 
-const STORAGE_KEY = "ep3_shooting_log_v5";
-let data = {};
-let sectionTitles = {};
-let sectionOrder = [];
+let pickerCtx = {       // 開啟 modal 時的狀態
+  takeId: null,
+  selectedTags: [],
+  activeZone: "A",
+};
 
 function load() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      data = parsed.data || {};
-      sectionTitles = parsed.titles || {};
-      sectionOrder = parsed.order || [];
+      state = { ...state, ...parsed };
     }
-  } catch(e) {
-    data = {};
-    sectionTitles = {};
-    sectionOrder = [];
-  }
-  DEFAULT_SECTIONS.forEach(s => {
-    if (!data[s.id]) {
-      data[s.id] = { takes: [{ id: 1, shot: "", camera: "", status: "", star: 0, content: "", note: "" }] };
-    }
-    if (!sectionTitles[s.id]) {
-      sectionTitles[s.id] = s.title;
-    }
-    if (!sectionOrder.includes(s.id)) {
-      sectionOrder.push(s.id);
-    }
-  });
+  } catch(e) {}
 }
-
 function save() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ data, titles: sectionTitles, order: sectionOrder }));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-function getSectionInfo(id) {
-  return DEFAULT_SECTIONS.find(s => s.id === id);
+function getAllSections() {
+  return [
+    ...DEFAULT_SECTIONS,
+    ...state.customSections.map(c => ({ ...c, zone: c.zone || "custom", direction: "" }))
+  ];
+}
+function getSection(id) {
+  return getAllSections().find(s => s.id === id);
+}
+function getSectionTitle(id) {
+  const s = getSection(id);
+  if (!s) return id;
+  return state.sectionTitles[id] || s.title;
+}
+function getSectionsByZone(zoneId) {
+  if (zoneId === "custom") {
+    return state.customSections.map(c => ({ ...c, zone: "custom", direction: "" }));
+  }
+  return DEFAULT_SECTIONS.filter(s => s.zone === zoneId);
+}
+function escapeHtml(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function updateDateLabel() {
+function todayStr() {
   const d = new Date();
-  const dateStr = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
-  document.getElementById('dateLabel').textContent = dateStr;
+  return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
 }
 
 function updateStats() {
-  let ok = 0, ng = 0, bk = 0, gold = 0, shots = new Set();
-  sectionOrder.forEach(id => {
-    (data[id]?.takes || []).forEach(t => {
-      if (t.status === "ok") ok++;
-      if (t.status === "ng") ng++;
-      if (t.status === "bk") bk++;
-      if (t.star >= 3) gold++;
-      if (t.shot && t.shot.trim()) shots.add(t.shot.trim());
-    });
+  const total = state.takes.length;
+  let ok = 0, ng = 0, gold = 0, pending = 0;
+  state.takes.forEach(t => {
+    if (t.status === "ok") ok++;
+    if (t.status === "ng") ng++;
+    if (t.star >= 3) gold++;
+    if (!t.status || !t.tags || t.tags.length === 0) pending++;
   });
+  document.getElementById('cntTotal').textContent = total;
   document.getElementById('cntOK').textContent = ok;
   document.getElementById('cntNG').textContent = ng;
-  document.getElementById('cntBK').textContent = bk;
   document.getElementById('cntGold').textContent = gold;
-  document.getElementById('cntShot').textContent = shots.size;
+  document.getElementById('cntPending').textContent = pending;
 }
 
-function render(highlightId) {
-  const expanded = {};
-  sectionOrder.forEach(id => {
-    const el = document.getElementById(`sec-${id}`);
-    expanded[id] = el && el.classList.contains('expanded');
-  });
-  
-  const root = document.getElementById('sections');
-  root.innerHTML = '';
-  
-  // 統計每個 zone（依目前順序中各 section 的原始 zone 屬性）
-  const zoneStats = { A: { ok: 0, total: 0 }, B: { ok: 0, total: 0 }, EX: { ok: 0, total: 0 } };
-  sectionOrder.forEach(id => {
-    const info = getSectionInfo(id);
-    if (!info) return;
-    const takes = data[id]?.takes || [];
-    zoneStats[info.zone].total += takes.length;
-    zoneStats[info.zone].ok += takes.filter(t => t.status === "ok").length;
-  });
-  
-  // 渲染：依現有順序遍歷，遇到 zone 變化就插入該 zone 的標頭
-  let lastZone = null;
-  sectionOrder.forEach((id, idx) => {
-    const info = getSectionInfo(id);
-    if (!info) return;
-    
-    if (info.zone !== lastZone) {
-      const z = ZONE_INFO[info.zone];
-      const stat = zoneStats[info.zone];
-      const zh = document.createElement('div');
-      zh.className = `zone-head ${info.zone}`;
-      zh.innerHTML = `
-        <span class="zone-label">${z.label}</span>
-        <span class="zone-name">${z.name}</span>
-        <span class="zone-count">${stat.ok}/${stat.total}</span>
-      `;
-      root.appendChild(zh);
-      lastZone = info.zone;
-    }
-    
-    const sec = document.createElement('div');
-    sec.className = 'section' + (expanded[id] ? ' expanded' : '') + (id === highlightId ? ' moved' : '');
-    sec.id = `sec-${id}`;
-    sec.dataset.id = id;
-    
-    const sectionTakes = (data[id]?.takes || []);
-    const takesCount = sectionTakes.length;
-    const okInSection = sectionTakes.filter(t => t.status === "ok").length;
-    const currentTitle = sectionTitles[id] || info.title;
-    const isFirst = idx === 0;
-    const isLast = idx === sectionOrder.length - 1;
-    
-    sec.innerHTML = `
-      <div class="section-head ${info.zone}">
-        <div class="move-btns">
-          <button class="move-btn" onclick="moveSection('${id}', -1)" ${isFirst ? 'disabled' : ''} title="向上移動">▲</button>
-          <button class="move-btn" onclick="moveSection('${id}', 1)" ${isLast ? 'disabled' : ''} title="向下移動">▼</button>
-        </div>
-        <span class="section-num">${id}</span>
-        <div class="section-title" contenteditable="true" data-secid="${id}" 
-             onblur="updateSectionTitle('${id}', this.textContent)"
-             onkeydown="handleTitleKeydown(event, this)">${escapeHtml(currentTitle)}</div>
-        <span class="section-count" onclick="toggleSection('${id}')">${okInSection}/${takesCount}</span>
-        <span class="section-toggle" onclick="toggleSection('${id}')">▼</span>
-      </div>
-      <div class="section-body" id="body-${id}">
-        ${info.direction ? `<div class="shot-direction"><strong>拍攝指示：</strong>${escapeHtml(info.direction)}</div>` : ''}
-        ${sectionTakes.map((t, i) => renderTake(id, t, i)).join('')}
-        <button class="btn-add" onclick="addTake('${id}')">＋ 新增一條 Take</button>
-      </div>
-    `;
-    
-    root.appendChild(sec);
-  });
-  
-  updateStats();
-  
-  // 滾到剛剛移動的段落
-  if (highlightId) {
-    setTimeout(() => {
-      const el = document.getElementById(`sec-${highlightId}`);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+function renderFilters() {
+  const filters = [
+    { id: "all", label: "全部", cls: "" },
+    { id: "pending", label: "⚠ 待整理", cls: "warn" },
+    { id: "ok", label: "⭕ OK", cls: "" },
+    { id: "ng", label: "❌ NG", cls: "" },
+    { id: "gold", label: "🌟 黃金", cls: "" },
+    { id: "no-tag", label: "🏷 沒標籤", cls: "warn" },
+  ];
+  document.getElementById('filterBar').innerHTML = filters.map(f => `
+    <button class="filter-chip ${f.cls} ${state.filter === f.id ? 'active' : ''}" 
+            onclick="setFilter('${f.id}')">${f.label}</button>
+  `).join('');
+}
+
+function setFilter(filterId) {
+  state.filter = filterId;
+  renderFilters();
+  renderTakes();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function getFilteredTakes() {
+  switch (state.filter) {
+    case "ok": return state.takes.filter(t => t.status === "ok");
+    case "ng": return state.takes.filter(t => t.status === "ng");
+    case "gold": return state.takes.filter(t => t.star >= 3);
+    case "pending": return state.takes.filter(t => !t.status || !t.tags || t.tags.length === 0);
+    case "no-tag": return state.takes.filter(t => !t.tags || t.tags.length === 0);
+    default:
+      // 若 filter 是某個 section id
+      if (state.filter && state.filter.match(/^[A-D]/) || (state.filter && state.filter.startsWith("custom-"))) {
+        return state.takes.filter(t => (t.tags || []).includes(state.filter));
       }
-    }, 50);
+      return state.takes;
   }
 }
 
-function renderTake(secId, take, idx) {
-  const takeId = `${secId}-${take.id}`;
+function renderTakes() {
+  const filtered = getFilteredTakes();
+  const area = document.getElementById('takesArea');
+  
+  if (state.takes.length === 0) {
+    area.innerHTML = `
+      <div class="takes-empty">
+        <div class="takes-empty-icon">🎬</div>
+        <div class="takes-empty-text">準備好開始記錄了嗎？</div>
+        <div class="takes-empty-hint">點下方綠色按鈕記下第一條 take<br>每條 take 可以後標 OK/NG、貼段落標籤</div>
+      </div>
+    `;
+    updateStats();
+    return;
+  }
+  
+  if (filtered.length === 0) {
+    area.innerHTML = `
+      <div class="takes-empty">
+        <div class="takes-empty-icon">🔍</div>
+        <div class="takes-empty-text">沒有符合的 Take</div>
+        <div class="takes-empty-hint">換個篩選看看</div>
+      </div>
+    `;
+    updateStats();
+    return;
+  }
+  
+  // 最新的放最上面（倒序）
+  const sortedTakes = [...filtered].reverse();
+  area.innerHTML = sortedTakes.map(t => renderTake(t)).join('');
+  updateStats();
+}
+
+function renderTake(take) {
+  const isGold = take.star >= 3;
+  const stateCls = take.status === "ok" ? "ok-state" 
+    : take.status === "ng" ? "ng-state"
+    : take.status === "bk" ? "bk-state"
+    : (!take.status || !(take.tags||[]).length) ? "pending" : "";
+  
+  const tags = take.tags || [];
+  let tagsHtml = '';
+  if (tags.length === 0) {
+    tagsHtml = '<span class="no-tags-hint">⚠ 還沒貼標籤</span>';
+  } else {
+    tags.forEach(tagId => {
+      const s = getSection(tagId);
+      const zoneCls = s ? s.zone : 'custom';
+      const title = getSectionTitle(tagId);
+      tagsHtml += `<span class="tag-chip ${zoneCls}" onclick="removeTag('${take.id}', '${tagId}')">
+        ${tagId}<span class="x">×</span>
+      </span>`;
+    });
+  }
+  tagsHtml += `<button class="btn-add-tag" onclick="openTagPicker('${take.id}')">+ 段落</button>`;
+  
   return `
-    <div class="take" id="take-${takeId}">
+    <div class="take ${isGold ? 'gold' : stateCls}" id="take-${take.id}">
       <div class="take-head">
-        <span class="take-id">${takeId}</span>
-        <input type="text" class="take-shot" placeholder="#拍序" value="${escapeHtml(take.shot || '')}" 
-               onchange="updateField('${secId}', ${idx}, 'shot', this.value)">
-        <input type="text" class="take-camera" placeholder="鏡頭Take" value="${escapeHtml(take.camera || '')}" 
-               onchange="updateField('${secId}', ${idx}, 'camera', this.value)">
-        <div class="take-status">
-          <button class="btn-status ok ${take.status==='ok'?'active':''}" onclick="setStatus('${secId}', ${idx}, 'ok')">⭕ OK</button>
-          <button class="btn-status ng ${take.status==='ng'?'active':''}" onclick="setStatus('${secId}', ${idx}, 'ng')">❌ NG</button>
-          <button class="btn-status bk ${take.status==='bk'?'active':''}" onclick="setStatus('${secId}', ${idx}, 'bk')">🔺 備用</button>
+        <span class="take-num">#${String(take.num).padStart(3,'0')}</span>
+        <div class="take-status-quick">
+          <button class="btn-quick ok ${take.status==='ok'?'active':''}" onclick="setStatus('${take.id}', 'ok')">⭕</button>
+          <button class="btn-quick ng ${take.status==='ng'?'active':''}" onclick="setStatus('${take.id}', 'ng')">❌</button>
+          <button class="btn-quick bk ${take.status==='bk'?'active':''}" onclick="setStatus('${take.id}', 'bk')">🔺</button>
         </div>
       </div>
-      <div class="take-star">
-        ${[1,2,3].map(n => `<button class="btn-star ${take.star >= n ? 'active' : ''}" onclick="setStar('${secId}', ${idx}, ${n})">🌟</button>`).join('')}
-        <span style="font-size:10px;color:#888;align-self:center;margin-left:4px">${take.star >= 3 ? '黃金' : take.star >= 2 ? '不錯' : take.star >= 1 ? '可用' : '未評'}</span>
+      
+      <div class="take-line2">
+        <input type="text" class="input-mini shot" placeholder="#拍序" value="${escapeHtml(take.shot || '')}" 
+               onchange="updateField('${take.id}', 'shot', this.value)">
+        <input type="text" class="input-mini" placeholder="鏡頭Take" value="${escapeHtml(take.camera || '')}" 
+               onchange="updateField('${take.id}', 'camera', this.value)">
+        <div class="take-star">
+          ${[1,2,3].map(n => `<button class="btn-star ${take.star >= n ? 'active' : ''}" onclick="setStar('${take.id}', ${n})">🌟</button>`).join('')}
+        </div>
+        <span class="star-label">${take.star >= 3 ? '黃金' : take.star >= 2 ? '不錯' : take.star >= 1 ? '可用' : ''}</span>
       </div>
-      <textarea class="take-input" placeholder="內容摘要(聊到哪、講了什麼;合併拍可寫:「同 A6-2」)" onchange="updateField('${secId}', ${idx}, 'content', this.value)">${escapeHtml(take.content || '')}</textarea>
-      <textarea class="take-input note" placeholder="現場注意事項 / 後製備註" onchange="updateField('${secId}', ${idx}, 'note', this.value)">${escapeHtml(take.note || '')}</textarea>
+      
+      <div class="tags-area">
+        <div class="tags-label">📍 段落標籤（可多選）</div>
+        <div class="tags-list">${tagsHtml}</div>
+      </div>
+      
+      <textarea class="take-input" placeholder="內容摘要（聊到哪、講了什麼）" onchange="updateField('${take.id}', 'content', this.value)">${escapeHtml(take.content || '')}</textarea>
+      <textarea class="take-input note" placeholder="現場注意事項 / 後製備註" onchange="updateField('${take.id}', 'note', this.value)">${escapeHtml(take.note || '')}</textarea>
+      
       <div class="take-btns">
-        <button class="btn-action" onclick="duplicateTake('${secId}', ${idx})">複製此條</button>
-        <button class="btn-action danger" onclick="deleteTake('${secId}', ${idx})">刪除</button>
+        <button class="btn-action" onclick="duplicateTake('${take.id}')">複製此條</button>
+        <button class="btn-action danger" onclick="deleteTake('${take.id}')">刪除</button>
       </div>
     </div>
   `;
 }
 
-function escapeHtml(s) {
-  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-// ─── 上下移動段落 ───
-function moveSection(id, direction) {
-  const idx = sectionOrder.indexOf(id);
-  if (idx < 0) return;
-  const newIdx = idx + direction;
-  if (newIdx < 0 || newIdx >= sectionOrder.length) return;
-  // 交換位置
-  [sectionOrder[idx], sectionOrder[newIdx]] = [sectionOrder[newIdx], sectionOrder[idx]];
+// ─── 核心：一鍵新增 take ───
+function quickAddTake() {
+  const newTake = {
+    id: 't-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+    num: state.nextTakeNum,
+    status: "",
+    star: 0,
+    tags: [],
+    content: "",
+    note: "",
+    shot: "",
+    camera: "",
+    createdAt: Date.now(),
+  };
+  state.takes.push(newTake);
+  state.nextTakeNum++;
   save();
-  render(id);
+  renderTakes();
+  // 滾到頂部新 take，並 focus 內容欄
+  setTimeout(() => {
+    const el = document.getElementById(`take-${newTake.id}`);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => {
+        const textarea = el.querySelector('.take-input');
+        if (textarea) textarea.focus();
+      }, 350);
+    }
+  }, 50);
 }
 
-// ─── 一般功能 ───
-function toggleSection(id) {
-  document.getElementById(`sec-${id}`)?.classList.toggle('expanded');
-}
-
-function updateSectionTitle(id, newTitle) {
-  newTitle = newTitle.trim();
-  if (!newTitle) {
-    const info = getSectionInfo(id);
-    sectionTitles[id] = info ? info.title : id;
-    render();
-  } else {
-    sectionTitles[id] = newTitle;
-  }
+// ─── Take 欄位更新 ───
+function findTake(id) { return state.takes.find(t => t.id === id); }
+function setStatus(takeId, status) {
+  const t = findTake(takeId);
+  if (!t) return;
+  t.status = t.status === status ? '' : status;
   save();
+  renderTakes();
 }
-
-function handleTitleKeydown(e, el) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    el.blur();
-  }
-}
-
-function setStatus(secId, idx, status) {
-  const take = data[secId].takes[idx];
-  take.status = take.status === status ? '' : status;
+function setStar(takeId, n) {
+  const t = findTake(takeId);
+  if (!t) return;
+  t.star = t.star === n ? n - 1 : n;
   save();
-  render();
-  document.getElementById(`sec-${secId}`)?.classList.add('expanded');
+  renderTakes();
 }
-
-function setStar(secId, idx, n) {
-  const take = data[secId].takes[idx];
-  take.star = take.star === n ? n - 1 : n;
-  save();
-  render();
-  document.getElementById(`sec-${secId}`)?.classList.add('expanded');
-}
-
-function updateField(secId, idx, field, value) {
-  data[secId].takes[idx][field] = value;
+function updateField(takeId, field, value) {
+  const t = findTake(takeId);
+  if (!t) return;
+  t[field] = value;
   save();
   updateStats();
 }
-
-function addTake(secId) {
-  const takes = data[secId].takes;
-  const nextId = takes.length > 0 ? Math.max(...takes.map(t => t.id)) + 1 : 1;
-  takes.push({ id: nextId, shot: "", camera: "", status: "", star: 0, content: "", note: "" });
-  save();
-  render();
-  document.getElementById(`sec-${secId}`)?.classList.add('expanded');
-}
-
-function duplicateTake(secId, idx) {
-  const takes = data[secId].takes;
-  const original = takes[idx];
-  const nextId = Math.max(...takes.map(t => t.id)) + 1;
-  takes.splice(idx + 1, 0, { 
-    id: nextId, 
+function duplicateTake(takeId) {
+  const t = findTake(takeId);
+  if (!t) return;
+  const newTake = {
+    ...t,
+    id: 't-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+    num: state.nextTakeNum,
+    status: "",
+    star: 0,
+    content: t.content + " (重拍)",
+    note: "",
     shot: "",
     camera: "",
-    status: "", 
-    star: 0, 
-    content: original.content + " (重拍)", 
-    note: ""
-  });
+    createdAt: Date.now(),
+  };
+  state.takes.push(newTake);
+  state.nextTakeNum++;
   save();
-  render();
-  document.getElementById(`sec-${secId}`)?.classList.add('expanded');
+  renderTakes();
+  setTimeout(() => {
+    const el = document.getElementById(`take-${newTake.id}`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 50);
 }
-
-function deleteTake(secId, idx) {
-  if (data[secId].takes.length <= 1) {
-    alert("至少要保留一條 take");
-    return;
-  }
+function deleteTake(takeId) {
   if (!confirm("確定刪除這條 take？")) return;
-  data[secId].takes.splice(idx, 1);
+  state.takes = state.takes.filter(t => t.id !== takeId);
   save();
-  render();
-  document.getElementById(`sec-${secId}`)?.classList.add('expanded');
+  renderTakes();
 }
 
-function expandAll() {
-  const allIds = sectionOrder;
-  const allExpanded = allIds.every(id => 
-    document.getElementById(`sec-${id}`)?.classList.contains('expanded')
-  );
-  allIds.forEach(id => {
-    const sec = document.getElementById(`sec-${id}`);
-    if (!sec) return;
-    if (allExpanded) sec.classList.remove('expanded');
-    else sec.classList.add('expanded');
-  });
+// ─── 標籤操作 ───
+function removeTag(takeId, tagId) {
+  const t = findTake(takeId);
+  if (!t) return;
+  t.tags = (t.tags || []).filter(x => x !== tagId);
+  save();
+  renderTakes();
 }
 
-function exportCSV() {
-  const rows = [
-    ["順序", "區", "場次", "Take", "拍序", "鏡頭Take", "OK/NG", "星等", "內容摘要", "現場備註"]
-  ];
+function openTagPicker(takeId) {
+  const t = findTake(takeId);
+  if (!t) return;
+  pickerCtx.takeId = takeId;
+  pickerCtx.selectedTags = [...(t.tags || [])];
+  pickerCtx.activeZone = "A";
+  renderTagPicker();
+  document.getElementById('tagPickerModal').classList.add('show');
+}
+
+function renderTagPicker() {
+  // tabs（A/B/C/D + 自訂）
+  const tabs = ZONES.map(z => `
+    <button class="zone-tab ${z.color} ${pickerCtx.activeZone === z.id ? 'active' : ''}" 
+            onclick="switchPickerZone('${z.id}')">${z.id} ${z.name}</button>
+  `).join('');
   
-  sectionOrder.forEach((id, sectionIndex) => {
-    const info = getSectionInfo(id);
-    if (!info) return;
-    const takes = data[id]?.takes || [];
-    const title = sectionTitles[id] || info.title;
+  const customTab = `
+    <button class="zone-tab custom ${pickerCtx.activeZone === 'custom' ? 'active' : ''}"
+            onclick="switchPickerZone('custom')">＋ 自訂</button>
+  `;
+  
+  document.getElementById('zoneTabs').innerHTML = tabs + customTab;
+  
+  // body
+  const body = document.getElementById('pickerBody');
+  let html = '';
+  
+  if (pickerCtx.activeZone === 'custom') {
+    // 自訂段落區
+    html += `
+      <div class="add-custom-row">
+        <input type="text" class="add-custom-input" id="customNameInput" 
+               placeholder="新段落名稱（例如：客戶臨時加的橋段）"
+               onkeydown="if(event.key==='Enter') addCustomSection()">
+        <button class="btn-add-custom" onclick="addCustomSection()">＋ 新增</button>
+      </div>
+    `;
     
-    rows.push([sectionIndex + 1, info.zone, `${id} - ${title}`, "", "", "", "", "", "", ""]);
+    if (state.customSections.length === 0) {
+      html += '<div style="text-align:center;color:var(--ink2);padding:20px;font-size:13px">尚無自訂段落<br><span style="font-size:11px;opacity:0.7">客戶臨時改腳本時就在這裡新增</span></div>';
+    } else {
+      state.customSections.forEach(s => {
+        const isSelected = pickerCtx.selectedTags.includes(s.id);
+        const title = state.sectionTitles[s.id] || s.title;
+        html += `
+          <div class="section-pick-item ${isSelected ? 'selected' : ''}" 
+               style="border-left-color:var(--ink2)"
+               onclick="toggleTag('${s.id}')">
+            <span class="section-pick-num">${s.id}</span>
+            <div class="section-pick-text">
+              <div class="section-pick-title">${escapeHtml(title)}</div>
+            </div>
+            ${isSelected ? '<span class="section-pick-check">✓</span>' : ''}
+          </div>
+        `;
+      });
+    }
+  } else {
+    // 預設區段
+    const sections = getSectionsByZone(pickerCtx.activeZone);
+    sections.forEach(s => {
+      const isSelected = pickerCtx.selectedTags.includes(s.id);
+      const title = state.sectionTitles[s.id] || s.title;
+      html += `
+        <div class="section-pick-item ${s.zone} ${isSelected ? 'selected' : ''}" 
+             onclick="toggleTag('${s.id}')">
+          <span class="section-pick-num">${s.id}</span>
+          <div class="section-pick-text">
+            <div class="section-pick-title">${escapeHtml(title)}</div>
+            ${s.direction ? `<div class="section-pick-desc">${escapeHtml(s.direction)}</div>` : ''}
+          </div>
+          ${isSelected ? '<span class="section-pick-check">✓</span>' : ''}
+        </div>
+      `;
+    });
+  }
+  
+  body.innerHTML = html;
+}
+
+function switchPickerZone(zoneId) {
+  pickerCtx.activeZone = zoneId;
+  renderTagPicker();
+}
+
+function toggleTag(tagId) {
+  if (pickerCtx.selectedTags.includes(tagId)) {
+    pickerCtx.selectedTags = pickerCtx.selectedTags.filter(x => x !== tagId);
+  } else {
+    pickerCtx.selectedTags.push(tagId);
+  }
+  renderTagPicker();
+}
+
+function addCustomSection() {
+  const input = document.getElementById('customNameInput');
+  const name = input.value.trim();
+  if (!name) return;
+  // 生成 id：custom-1, custom-2...
+  const nextNum = state.customSections.length + 1;
+  let id = `EX${nextNum}`;
+  // 避免和 D 區的 EX1/EX2/EX3 衝突
+  const existingIds = new Set([...DEFAULT_SECTIONS.map(s=>s.id), ...state.customSections.map(s=>s.id)]);
+  let counter = nextNum;
+  while (existingIds.has(id)) {
+    counter++;
+    id = `EX${counter}`;
+  }
+  state.customSections.push({ id, title: name });
+  // 自動勾選新建的
+  pickerCtx.selectedTags.push(id);
+  input.value = '';
+  save();
+  renderTagPicker();
+}
+
+function closeTagPicker() {
+  document.getElementById('tagPickerModal').classList.remove('show');
+}
+
+function confirmTagPicker() {
+  const t = findTake(pickerCtx.takeId);
+  if (t) {
+    t.tags = [...pickerCtx.selectedTags];
+    save();
+  }
+  closeTagPicker();
+  renderTakes();
+}
+
+// ─── 段落概覽 ───
+function showOverview() {
+  const body = document.getElementById('overviewBody');
+  let html = '';
+  
+  ZONES.forEach(z => {
+    const sections = getSectionsByZone(z.id);
+    const zoneTakes = sections.reduce((acc, s) => {
+      const cnt = state.takes.filter(t => (t.tags||[]).includes(s.id)).length;
+      return acc + cnt;
+    }, 0);
+    const filledCnt = sections.filter(s => state.takes.some(t => (t.tags||[]).includes(s.id))).length;
     
-    takes.forEach(t => {
-      const statusLabel = t.status === "ok" ? "⭕ OK" 
-        : t.status === "ng" ? "❌ NG"
-        : t.status === "bk" ? "🔺 備用" : "";
-      const starLabel = "🌟".repeat(t.star);
+    html += `<div style="padding:10px 4px 6px;font-size:11px;font-weight:700;color:var(--ink2);letter-spacing:1px">
+      ${z.id} 區　${z.name}　·　${zoneTakes} Takes　·　${filledCnt}/${sections.length} 段
+    </div>`;
+    
+    sections.forEach(s => {
+      const relatedTakes = state.takes.filter(t => (t.tags||[]).includes(s.id));
+      const title = state.sectionTitles[s.id] || s.title;
+      
+      let statusBar = '';
+      if (relatedTakes.length === 0) {
+        statusBar = '<span style="color:#aaa;font-size:11px">尚未拍攝</span>';
+      } else {
+        const okCnt = relatedTakes.filter(t => t.status === 'ok').length;
+        const goldCnt = relatedTakes.filter(t => t.star >= 3).length;
+        statusBar = `<span style="font-size:11px">${relatedTakes.length} 條`;
+        if (okCnt > 0) statusBar += `　<span style="color:var(--ok);font-weight:700">⭕${okCnt}</span>`;
+        if (goldCnt > 0) statusBar += `　<span style="color:var(--gold);font-weight:700">🌟${goldCnt}</span>`;
+        statusBar += '</span>';
+      }
+      
+      html += `
+        <div class="section-pick-item ${z.color}" 
+             onclick="filterBySection('${s.id}')">
+          <span class="section-pick-num">${s.id}</span>
+          <div class="section-pick-text">
+            <div class="section-pick-title">${escapeHtml(title)}</div>
+            <div class="section-pick-desc">${statusBar}</div>
+          </div>
+        </div>
+      `;
+    });
+  });
+  
+  // 自訂段落
+  if (state.customSections.length > 0) {
+    html += `<div style="padding:10px 4px 6px;font-size:11px;font-weight:700;color:var(--ink2);letter-spacing:1px">
+      自訂段落（現場加的）
+    </div>`;
+    state.customSections.forEach(s => {
+      const relatedTakes = state.takes.filter(t => (t.tags||[]).includes(s.id));
+      const title = state.sectionTitles[s.id] || s.title;
+      let statusBar = '';
+      if (relatedTakes.length === 0) {
+        statusBar = '<span style="color:#aaa;font-size:11px">尚未拍攝</span>';
+      } else {
+        const okCnt = relatedTakes.filter(t => t.status === 'ok').length;
+        const goldCnt = relatedTakes.filter(t => t.star >= 3).length;
+        statusBar = `<span style="font-size:11px">${relatedTakes.length} 條`;
+        if (okCnt > 0) statusBar += `　<span style="color:var(--ok);font-weight:700">⭕${okCnt}</span>`;
+        if (goldCnt > 0) statusBar += `　<span style="color:var(--gold);font-weight:700">🌟${goldCnt}</span>`;
+        statusBar += '</span>';
+      }
+      html += `
+        <div class="section-pick-item" style="border-left-color:var(--ink2)"
+             onclick="filterBySection('${s.id}')">
+          <span class="section-pick-num">${s.id}</span>
+          <div class="section-pick-text">
+            <div class="section-pick-title">${escapeHtml(title)}</div>
+            <div class="section-pick-desc">${statusBar}</div>
+          </div>
+        </div>
+      `;
+    });
+  }
+  
+  body.innerHTML = html;
+  document.getElementById('overviewModal').classList.add('show');
+}
+
+function closeOverview() {
+  document.getElementById('overviewModal').classList.remove('show');
+}
+
+function filterBySection(sectionId) {
+  state.filter = sectionId;
+  closeOverview();
+  renderFilters();
+  renderTakes();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── 匯出 / 清除 ───
+function exportCSV() {
+  const rows = [["#", "拍序", "鏡頭Take", "OK/NG", "星等", "段落標籤", "內容摘要", "現場備註"]];
+  state.takes.forEach(t => {
+    const statusLabel = t.status === "ok" ? "⭕ OK" 
+      : t.status === "ng" ? "❌ NG"
+      : t.status === "bk" ? "🔺 備用" : "";
+    const starLabel = "🌟".repeat(t.star);
+    const tagsLabel = (t.tags || []).map(id => {
+      const title = getSectionTitle(id);
+      return `${id} ${title}`;
+    }).join('； ');
+    rows.push([
+      `#${String(t.num).padStart(3,'0')}`,
+      t.shot || "",
+      t.camera || "",
+      statusLabel,
+      starLabel,
+      tagsLabel || "（無標籤）",
+      t.content || "",
+      t.note || "",
+    ]);
+  });
+  
+  // 加上依段落分群的區塊
+  rows.push(["", "", "", "", "", "", "", ""]);
+  rows.push(["── 依段落分群 ──", "", "", "", "", "", "", ""]);
+  
+  const allSecIds = [...DEFAULT_SECTIONS.map(s=>s.id), ...state.customSections.map(s=>s.id)];
+  allSecIds.forEach(sid => {
+    const related = state.takes.filter(t => (t.tags||[]).includes(sid));
+    if (related.length === 0) return;
+    rows.push([`◆ ${sid} ${getSectionTitle(sid)}`, "", "", "", "", "", "", ""]);
+    related.forEach(t => {
+      const statusLabel = t.status === "ok" ? "⭕" : t.status === "ng" ? "❌" : t.status === "bk" ? "🔺" : "";
       rows.push([
-        "",
-        info.zone,
-        id,
-        `${id}-${t.id}`,
-        t.shot || "",
-        t.camera || "",
-        statusLabel,
-        starLabel,
-        t.content || "",
-        t.note || ""
+        `#${String(t.num).padStart(3,'0')}`,
+        t.shot || "", t.camera || "",
+        statusLabel, "🌟".repeat(t.star),
+        "", t.content || "", t.note || "",
       ]);
     });
   });
   
   const BOM = "\uFEFF";
-  const csv = BOM + rows.map(row => 
-    row.map(cell => {
-      const s = String(cell).replace(/"/g, '""');
-      return `"${s}"`;
-    }).join(",")
-  ).join("\r\n");
-  
+  const csv = BOM + rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\r\n");
   const d = new Date();
   const dateStr = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
-  const filename = `EP3_場記_${dateStr}.csv`;
-  
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  a.href = url; a.download = `EP3_場記_${dateStr}.csv`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
   setTimeout(() => URL.revokeObjectURL(url), 100);
 }
 
-function showResetModal() {
-  document.getElementById('resetModal').classList.add('show');
-}
-function closeResetModal() {
-  document.getElementById('resetModal').classList.remove('show');
-}
+function showResetModal() { document.getElementById('resetModal').classList.add('show'); }
+function closeResetModal() { document.getElementById('resetModal').classList.remove('show'); }
 function resetAll() {
-  data = {};
-  sectionTitles = {};
-  sectionOrder = [];
-  DEFAULT_SECTIONS.forEach(s => {
-    data[s.id] = { takes: [{ id: 1, shot: "", camera: "", status: "", star: 0, content: "", note: "" }] };
-    sectionTitles[s.id] = s.title;
-    sectionOrder.push(s.id);
-  });
+  state = {
+    takes: [],
+    customSections: [],
+    sectionTitles: {},
+    nextTakeNum: 1,
+    filter: "all",
+  };
   save();
-  render();
   closeResetModal();
+  renderFilters();
+  renderTakes();
 }
 
-updateDateLabel();
-load();
-render();
-const firstId = sectionOrder[0];
-if (firstId) document.getElementById(`sec-${firstId}`)?.classList.add('expanded');
+// Modal 背景關閉
+document.getElementById('tagPickerModal').addEventListener('click', function(e) {
+  if (e.target === this) closeTagPicker();
+});
+document.getElementById('overviewModal').addEventListener('click', function(e) {
+  if (e.target === this) closeOverview();
+});
 
+// 初始化
+document.getElementById('todayDate').textContent = todayStr();
+load();
+renderFilters();
+renderTakes();
 </script>
 
 </body>
