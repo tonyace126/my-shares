@@ -1,0 +1,20 @@
+# Secrets (規範第一道防線)
+.env
+.env.*
+!.env.example
+
+# macOS / IDE
+.DS_Store
+.vscode/*
+!.vscode/settings.json
+.idea/
+
+# Logs / temp
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Local-only artifacts
+*.local.*
+node_modules/
