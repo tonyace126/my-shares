@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>打造你的「信boy」全自動信箱助理 — 跟著做就會</title>
+<meta name="description" content="一份填空模板教學：用 Claude 排程任務，讓 AI 每天早中晚自動讀信、分類、擬草稿、回報給你。所有私密值都是佔位符，換成你的就能用。Notion 為選用。">
+<style>
+  :root {
+    --bg: #faf7f2; --card: #ffffff; --ink: #1f1d1a; --muted: #6e6a64;
+    --line: #e8e3da; --accent: #c8553d; --gold: #d4a017; --highlight: #fff4e6;
+    --code-bg: #2a2218; --code-text: #f3ede2; --opt: #88a5a8; --ph: #b5651d;
+  }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+    background: var(--bg); color: var(--ink); line-height: 1.75; margin: 0; padding: 0; }
+  .container { max-width: 820px; margin: 0 auto; padding: 40px 24px 80px; }
+  .topnav { background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 10px 16px;
+    margin-bottom: 32px; font-size: 13px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .topnav a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .topnav a:hover { text-decoration: underline; }
+  .topnav .sep { color: var(--muted); }
+  header { text-align: center; padding: 24px 0 32px; border-bottom: 2px solid var(--ink); margin-bottom: 28px; }
+  header h1 { font-size: 30px; margin: 0 0 12px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.3; }
+  header .sub { color: var(--muted); font-size: 15px; margin: 0; }
+  header .meta { color: var(--muted); font-size: 12px; margin-top: 12px; font-style: italic; }
+  .hero { background: var(--highlight); border: 2px solid var(--gold); border-radius: 12px; padding: 24px 28px; margin: 0 0 36px; }
+  .hero .tldr-label { font-size: 12px; font-weight: 800; letter-spacing: 2px; color: var(--accent); margin: 0 0 10px; }
+  .hero h2 { font-size: 18px; margin: 0 0 10px; }
+  .hero p { margin: 6px 0; font-size: 15px; }
+  h2.sec { font-size: 22px; margin: 44px 0 16px; padding-bottom: 8px; border-bottom: 2px solid var(--line); }
+  h3 { font-size: 17px; margin: 28px 0 10px; }
+  p { margin: 12px 0; }
+  ul, ol { padding-left: 22px; }
+  li { margin: 7px 0; }
+  code { background: #efe9df; color: #7a3b1d; padding: 1px 6px; border-radius: 5px; font-size: 13.5px;
+    font-family: "SF Mono", Menlo, Consolas, monospace; }
+  pre { background: var(--code-bg); color: var(--code-text); padding: 18px 20px; border-radius: 10px;
+    overflow-x: auto; font-size: 13px; line-height: 1.6; font-family: "SF Mono", Menlo, Consolas, monospace; }
+  pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+  .step { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 22px 26px; margin: 18px 0;
+    position: relative; }
+  .step .num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px;
+    background: var(--accent); color: #fff; border-radius: 50%; font-weight: 800; font-size: 15px; margin-right: 10px; }
+  .step h3 { display: inline; vertical-align: middle; margin: 0; }
+  .ph { background: #fff0dd; color: var(--ph); padding: 1px 7px; border-radius: 5px; font-weight: 700;
+    font-size: 13.5px; border: 1px dashed var(--ph); }
+  .callout { border-radius: 10px; padding: 14px 18px; margin: 18px 0; font-size: 14.5px; }
+  .callout.warn { background: #fdeee9; border: 1px solid var(--accent); }
+  .callout.opt { background: #eef4f4; border: 1px solid var(--opt); }
+  .callout.tip { background: var(--highlight); border: 1px solid var(--gold); }
+  .callout .lbl { font-weight: 800; letter-spacing: 1px; font-size: 12px; display: block; margin-bottom: 6px; }
+  .callout.warn .lbl { color: var(--accent); }
+  .callout.opt .lbl { color: #4c7378; }
+  .badge { display: inline-block; background: var(--opt); color: #fff; font-size: 11px; font-weight: 700;
+    padding: 2px 9px; border-radius: 20px; margin-left: 8px; vertical-align: middle; letter-spacing: 1px; }
+  footer { text-align: center; color: var(--muted); font-size: 12.5px; margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); }
+  .redline { background: #fff; border: 2px solid var(--accent); border-radius: 12px; padding: 18px 24px; margin: 22px 0; }
+  .redline h3 { color: var(--accent); margin-top: 0; }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="topnav">
+    <a href="https://tonyace126.github.io/my-shares/">🏠 分享櫃首頁</a>
+    <span class="sep">·</span>
+    <a href="https://tonyace126.github.io/my-shares/how-i-built-brand-research-toolkit.html">🛠️ 開發故事</a>
+    <span class="sep">·</span>
+    <span style="color:var(--muted)">📬 信箱助理教學</span>
+  </nav>
+
+  <header>
+    <h1>打造你的「信boy」<br>全自動信箱助理 🫡</h1>
+    <p class="sub">讓 AI 每天早中晚自動讀信、分類、擬好回覆草稿、整理成一份報告推給你</p>
+    <p class="meta">填空模板教學 · 所有私密值都是佔位符，換成你自己的就能用 · 2026-05</p>
+  </header>
+
+  <div class="hero">
+    <p class="tldr-label">這套在做什麼</p>
+    <h2>你早上起床，已經有一份報告在等你：</h2>
+    <p>📬 <strong>① 整理了什麼</strong>：掃了幾封新信、濾掉幾封廣告電子報</p>
+    <p>🗂️ <strong>② 歸類了什麼</strong>：哪些信屬於哪個客戶/專案、草稿已擬好</p>
+    <p>✅ <strong>③ 要你決斷的</strong>：哪幾封要你過目、哪封不確定歸哪、其餘按發送即可</p>
+    <p style="margin-top:14px; font-size:14px; color:var(--muted)">你的角色縮到「看報告 → 按發送 → 拍板模糊的」。讀信、分類、擬稿全是它做完攤給你看。</p>
+  </div>
+
+  <h2 class="sec">🧠 運作原理（30 秒看懂）</h2>
+  <p>核心是一個 <strong>Claude 排程任務（scheduled task）</strong>。它每天在你設的時段自動醒來，用你已授權的連接器去讀你的信箱，判讀後把回覆存成<strong>草稿</strong>（不寄出），最後把整理結果推一則訊息給你。</p>
+  <p>關鍵前提：這些動作跑在你的 Claude App 環境裡，用的是<strong>你授權過的連接器</strong>——不需要寫任何程式、不需要付費 API。</p>
+
+  <div class="callout warn">
+    <span class="lbl">⚠️ 三條鐵則（這套設計的底線）</span>
+    1. <strong>絕不自動寄信</strong>——只存草稿，發送鍵永遠你按。<br>
+    2. <strong>不確定不亂歸檔</strong>——配不到就列「待你確認」。<br>
+    3. <strong>不開付費服務</strong>——騎你現有的 Claude 訂閱。
+  </div>
+
+  <h2 class="sec">📋 開始前你需要</h2>
+  <ul>
+    <li>Claude 桌面 App（Claude Code / Cowork），且<strong>保持開著</strong>排程才會跑（關著會在下次開啟時補跑）</li>
+    <li>一個 Gmail / Google Workspace 信箱（要被處理的那個）</li>
+    <li>一個能收通知的地方：<strong>Slack 或 Discord 的 incoming webhook</strong></li>
+    <li><span class="badge">選用</span> Notion（若你想讓它自動歸檔需求到專案）</li>
+  </ul>
+
+  <h2 class="sec">🚶 跟著做（5 步）</h2>
+
+  <div class="step">
+    <p><span class="num">1</span><h3>授權連接器</h3></p>
+    <p>到 <code>claude.ai/customize/connectors</code>，連上 <strong>Gmail</strong>（給「可建立草稿」權限）。要用 Notion 歸檔的也連 <strong>Notion</strong>。</p>
+    <div class="callout warn"><span class="lbl">最重要</span>Gmail 連接器認的<strong>必須是你要處理的那個信箱帳號</strong>——它只會動它登入的那一個。</div>
+  </div>
+
+  <div class="step">
+    <p><span class="num">2</span><h3>準備回報管道（webhook）</h3></p>
+    <p>在你的 Slack 頻道或 Discord 頻道建一個 <strong>incoming webhook</strong>，拿到一條像這樣的網址：</p>
+    <pre><code>Slack：  https://hooks.slack.com/services/<span class="ph">《你的》</span>
+Discord：https://discord.com/api/webhooks/<span class="ph">《你的》</span></code></pre>
+    <p>為什麼用 webhook？因為它能以「<span class="ph">《助理代號》</span>」這種獨立身分發給你，<strong>你才會收到推播</strong>（用連接器發會變成「你自己發給自己」，不會跳通知）。</p>
+  </div>
+
+  <div class="step">
+    <p><span class="num">3</span><h3>建立排程任務，貼上這段 prompt</h3></p>
+    <p>在 Claude 裡叫它建一個排程任務（scheduled task / routine），時段設你要的（例：每天 9、13、18 點），prompt 貼下面這段——<strong>把所有 <span class="ph">《…》</span> 換成你的值</strong>：</p>
+    <pre><code>你是我的信件偵蒐助理，代號「<span class="ph">《助理代號，例如 信boy》</span>」。
+信箱是 <span class="ph">《你的信箱，例如 you@company.com》</span>，內部網域 <span class="ph">《你的網域，例如 company.com》</span>。
+
+# 操作眉角（很重要，照做）
+- 先用 ToolSearch 載入工具："gmail search_threads"、"gmail create_draft"、
+  "gmail get_thread"（要歸檔再加 "notion search"）。
+- Gmail 偶發 "Tool execution failed. You can try again." → 自動重試一次。
+- 回報走 webhook（見步驟6），不要用 Slack 連接器發。
+
+# 紅線（絕不違反）
+1. 絕不寄信——回覆一律只 create_draft 存草稿。
+2. 不確定就先列「待確認」，不臆測、不亂歸檔。
+
+# 步驟
+1. 讀信：Gmail search_threads 查
+   `in:inbox is:unread newer_than:2d -category:promotions -category:social -category:forums`
+2. 去重：讀 <span class="ph">《一個本機 json 路徑，記已處理過的信，例 ~/mail-assistant/processed.json》</span>
+   （不存在=空），跳過已記的 id。
+3. 過濾掉：寄件人含 no-reply/noreply/mailer-daemon；帶 List-Unsubscribe 標頭（電子報）；
+   內部網域寄來的（除非內文明確要你回）。剩下才是真人外部來信。
+4. 逐封 get_thread 抓全文 → 解析（誰寄/要什麼/目的/deadline/急迫度）→
+   create_draft 擬一封專業簡潔的回覆（回原 thread，不寄出）。
+   〔選用·Notion〕有把握配到現有專案就 notion-search 找到該專案頁、記一筆需求。
+5. 把處理過的 id 追加寫回步驟2那個 json（append 不覆蓋）。
+6. 回報：組一段三段式內文（① 整理了什麼 ② 歸類了什麼 ③ 要你決斷的），
+   然後 POST 到你的 webhook，payload 含
+   "username":"<span class="ph">《助理代號》</span>" 和 "text":你的內文。確認 HTTP 200。
+
+如實、簡潔。所有草稿只存不發，等我決斷。</code></pre>
+  </div>
+
+  <div class="step">
+    <p><span class="num">4</span><h3>首次手動跑一次（預先授權）</h3></p>
+    <p>第一次<strong>手動 Run now</strong> 跑一遍，過程會跳工具授權（Gmail 讀信、建草稿、webhook）——都按允許。這些授權會存進任務，之後排程自動跑就不會再卡。</p>
+    <div class="callout tip"><span class="lbl">💡 眉角</span>看到「Bypass Permissions mode isn't enabled」的黃色提醒？<strong>無害，直接關掉</strong>。不需要、也不建議去開全域 Bypass（那會讓所有工具免確認，是安全洞）。</div>
+  </div>
+
+  <div class="step">
+    <p><span class="num">5</span><h3>收工 — 它會自己跑了</h3></p>
+    <p>之後每到設定時段，只要 App 開著，它就自動讀信、擬稿、推報告給你。你看一份報告、按發送就好。</p>
+  </div>
+
+  <h2 class="sec">🧩 選用模組 <span class="badge">想要再加</span></h2>
+
+  <div class="callout opt">
+    <span class="lbl">A · NOTION 自動歸檔</span>
+    <strong>不用 Notion？整段刪掉就好</strong>——刪掉 prompt 步驟 4 那行〔選用·Notion〕，助理就只「擬草稿 + 回報」，照常運作。<br>
+    要用的話：連上 Notion 連接器，並在 prompt 裡告訴它你的專案資料庫怎麼比對（用客戶名/寄件網域去 notion-search 找對應專案頁）。<strong>整套邏輯不綁死 Notion，Notion 只是其中一塊拼圖。</strong>
+  </div>
+
+  <div class="callout opt">
+    <span class="lbl">B · 即時偵測（時段之間也不漏信）</span>
+    排程是早中晚三次；若你想「信一進來幾分鐘內就知道」，可額外做一支每 10 分鐘跑的小腳本（用 IMAP app 密碼讀信、命中就 webhook 提醒）。這塊較進階、要生一組 Gmail <span class="ph">《應用程式密碼》</span> 存進系統 keychain（<strong>別寫進任何檔案</strong>）。沒有它，排程版照樣完整可用。
+  </div>
+
+  <div class="redline">
+    <h3>🔐 安全提醒</h3>
+    <ul style="margin:6px 0">
+      <li><span class="ph">《應用程式密碼》</span>、<span class="ph">《webhook 網址》</span> 都是機密——存進系統 keychain 或環境變數，<strong>永遠不要寫進會上傳/分享的檔案</strong>。</li>
+      <li>本教學裡所有 <span class="ph">《…》</span> 都是佔位符；換成你自己的值，<strong>別把真實密碼貼進對話或推上網</strong>。</li>
+      <li>Gmail「應用程式密碼」要在帳號開啟兩步驟驗證後，於 <code>myaccount.google.com/apppasswords</code> 產生（16 碼全小寫）。</li>
+    </ul>
+  </div>
+
+  <h2 class="sec">❓ 常見問題</h2>
+  <h3>它會自己把信寄出去嗎？</h3>
+  <p>不會，也不該。它只<strong>存草稿</strong>，發送永遠是你按。這是設計底線。</p>
+  <h3>電腦關機 / App 沒開會怎樣？</h3>
+  <p>排程跑在 App 裡，App 沒開那個時段就不跑，會在你下次開 App 時補跑。想要關機也跑的「真雲端」需要額外架設，不在這份教學範圍。</p>
+  <h3>會花錢嗎？</h3>
+  <p>不會新增帳單——它騎你現有的 Claude 訂閱額度，不開任何付費 API key。</p>
+  <h3>一定要用 Notion 嗎？</h3>
+  <p>不用。Notion 是<strong>選用</strong>的歸檔模組，刪掉那段，助理依然會讀信、擬稿、回報。</p>
+
+  <footer>
+    這份教學由 Claude 自動產出 · 填空模板，換成你的值即可複製這套<br>
+    紅線：只擬草稿不寄信 · 不確定不亂歸 · 不開付費服務
+  </footer>
+</div>
+</body>
+</html>
