@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>打造你的「信boy」全自動信箱助理 — 跟著做就會</title>
+<title>打造你的 AI 信箱助理 — 自動讀信、分類、擬稿、回報</title>
 <meta name="description" content="一份填空模板教學：用 Claude 排程任務，讓 AI 每天早中晚自動讀信、分類、擬草稿、回報給你。所有私密值都是佔位符，換成你的就能用。Notion 為選用。">
 <style>
   :root {
@@ -70,7 +70,7 @@
   </nav>
 
   <header>
-    <h1>打造你的「信boy」<br>全自動信箱助理 🫡</h1>
+    <h1>打造你的 AI 信箱助理 📬<br>自動讀信、分類、擬稿、回報</h1>
     <p class="sub">讓 AI 每天早中晚自動讀信、分類、擬好回覆草稿、整理成一份報告推給你</p>
     <p class="meta">填空模板教學 · 所有私密值都是佔位符，換成你自己的就能用 · 2026-05</p>
   </header>
@@ -116,13 +116,13 @@
     <p>在你的 Slack 頻道或 Discord 頻道建一個 <strong>incoming webhook</strong>，拿到一條像這樣的網址：</p>
     <pre><code>Slack：  https://hooks.slack.com/services/<span class="ph">《你的》</span>
 Discord：https://discord.com/api/webhooks/<span class="ph">《你的》</span></code></pre>
-    <p>為什麼用 webhook？因為它能以「<span class="ph">《助理代號》</span>」這種獨立身分發給你，<strong>你才會收到推播</strong>（用連接器發會變成「你自己發給自己」，不會跳通知）。</p>
+    <p>為什麼用 webhook？因為它能以「AI助理」這種獨立身分發給你，<strong>你才會收到推播</strong>（用連接器發會變成「你自己發給自己」，不會跳通知）。</p>
   </div>
 
   <div class="step">
     <p><span class="num">3</span><h3>建立排程任務，貼上這段 prompt</h3></p>
     <p>在 Claude 裡叫它建一個排程任務（scheduled task / routine），時段設你要的（例：每天 9、13、18 點），prompt 貼下面這段——<strong>把所有 <span class="ph">《…》</span> 換成你的值</strong>：</p>
-    <pre><code>你是我的信件偵蒐助理，代號「<span class="ph">《助理代號，例如 信boy》</span>」。
+    <pre><code>你是我的 AI 信件助理。
 信箱是 <span class="ph">《你的信箱，例如 you@company.com》</span>，內部網域 <span class="ph">《你的網域，例如 company.com》</span>。
 
 # 操作眉角（很重要，照做）
@@ -148,7 +148,7 @@ Discord：https://discord.com/api/webhooks/<span class="ph">《你的》</span><
 5. 把處理過的 id 追加寫回步驟2那個 json（append 不覆蓋）。
 6. 回報：組一段三段式內文（① 整理了什麼 ② 歸類了什麼 ③ 要你決斷的），
    然後 POST 到你的 webhook，payload 含
-   "username":"<span class="ph">《助理代號》</span>" 和 "text":你的內文。確認 HTTP 200。
+   "username":"AI助理" 和 "text":你的內文。確認 HTTP 200。
 
 如實、簡潔。所有草稿只存不發，等我決斷。</code></pre>
   </div>

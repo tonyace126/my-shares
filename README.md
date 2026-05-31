@@ -9,7 +9,7 @@ Tony 的分享頁面集（由 Claude 自動維護）。
 - 🇨🇳 [2023-2026 大陸餐飲品牌社群爆紅事件大盤點](https://tonyace126.github.io/my-shares/cn-fnb-viral-campaigns-2023-2026.html)
 - 🛠️ [從「幫我找銀行影片」到一個 GitHub Plugin — 一個下午的開發故事](https://tonyace126.github.io/my-shares/how-i-built-brand-research-toolkit.html)
 - 🛠️ [brand-research-toolkit 完整安裝教學（Mac & Windows）](https://tonyace126.github.io/my-shares/brand-research-toolkit-install-guide.html)
-- 📬 [打造你的「信boy」全自動信箱助理 — 跟著做就會](https://tonyace126.github.io/my-shares/build-your-mail-assistant.html)
+- 📬 [打造你的 AI 信箱助理 — 自動讀信、分類、擬稿、回報](https://tonyace126.github.io/my-shares/build-your-mail-assistant.html)
 - 💍 [Cartier LOVE 系列 — 台灣 PTT / Dcard 口碑觀察](https://tonyace126.github.io/my-shares/cartier-love-social-pulse.html)
 - 💎 [Cartier LOVE — 近兩年媒體曝光與品牌策略觀察](https://tonyace126.github.io/my-shares/cartier-love-media-buzz.html)
 - 🎬 [EP3 場記表（現場即時記錄互動工具）](https://tonyace126.github.io/my-shares/ep3-shooting-log.html)
