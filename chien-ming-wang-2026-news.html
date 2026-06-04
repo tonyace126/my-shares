@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>王建民 2026 近期動態 — 摔電話門事件 × 中信兄弟教練成效（經交叉驗證）</title>
+<style>
+  :root {
+    --bg: #faf7f2;
+    --card: #ffffff;
+    --ink: #1f1d1a;
+    --muted: #6e6a64;
+    --line: #e8e3da;
+    --accent: #c8553d;
+    --gold: #d4a017;
+    --highlight: #fff4e6;
+    --good: #e8f3ec;
+    --bad: #fbeceb;
+    --neutral: #f3efe8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+    margin: 0;
+    padding: 0;
+  }
+  .container { max-width: 980px; margin: 0 auto; padding: 40px 24px 80px; }
+  .topnav {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 16px;
+    margin-bottom: 32px;
+    font-size: 13px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .topnav a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .topnav a:hover { text-decoration: underline; }
+  .topnav .sep { color: var(--muted); }
+  header {
+    text-align: center;
+    padding: 24px 0 40px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 40px;
+  }
+  header h1 { font-size: 30px; margin: 0 0 8px; font-weight: 800; letter-spacing: -0.5px; }
+  header .sub { color: var(--muted); font-size: 14px; margin: 0; }
+  header .meta { color: var(--muted); font-size: 12px; margin-top: 12px; font-style: italic; }
+
+  h2 {
+    font-size: 22px;
+    margin: 48px 0 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  h3 { font-size: 17px; margin: 28px 0 12px; color: var(--accent); }
+
+  .hero-box {
+    background: linear-gradient(135deg, #fff4e6 0%, #fff 100%);
+    padding: 24px 28px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    margin-bottom: 24px;
+  }
+  .hero-box h3 { margin-top: 0; color: var(--ink); font-size: 18px; }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .hero-cell {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .hero-cell .label { font-size: 12px; color: var(--muted); letter-spacing: 0.5px; margin-bottom: 4px; }
+  .hero-cell .val { font-size: 14px; font-weight: 700; line-height: 1.5; }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    background: var(--card);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .table th, .table td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    font-size: 14px;
+    vertical-align: top;
+  }
+  .table th { background: var(--highlight); font-weight: 700; font-size: 13px; color: var(--muted); letter-spacing: 0.5px; }
+  .table tr:last-child td { border-bottom: none; }
+  .table a { color: var(--accent); text-decoration: none; }
+  .table a:hover { text-decoration: underline; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--accent);
+    color: #fff;
+    margin-right: 6px;
+  }
+  .badge.gold { background: var(--gold); }
+  .badge.muted { background: var(--muted); }
+  .badge.high { background: #1f7a3f; }
+  .badge.blank { background: #9a948c; }
+
+  .topic-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 18px;
+  }
+  .topic-card .title { font-weight: 700; font-size: 17px; margin-bottom: 10px; line-height: 1.5; }
+  .topic-card .meta-row { color: var(--muted); font-size: 12px; margin-bottom: 12px; }
+  .topic-card .desc { color: var(--ink); font-size: 14px; line-height: 1.75; }
+  .topic-card .desc p { margin: 6px 0; }
+  .topic-card .desc strong { color: var(--accent); }
+  .topic-card .quote {
+    border-left: 3px solid var(--gold);
+    background: var(--highlight);
+    padding: 8px 14px;
+    margin: 10px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 13.5px;
+    color: var(--ink);
+  }
+  .topic-card .link { margin-top: 12px; font-size: 13px; }
+  .topic-card .link a { color: var(--accent); text-decoration: none; font-weight: 600; word-break: break-all; }
+  .topic-card .link a:hover { text-decoration: underline; }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .col-card { border-radius: 10px; padding: 18px 20px; border: 1px solid var(--line); }
+  .col-card.good { background: var(--good); }
+  .col-card.bad { background: var(--bad); }
+  .col-card h4 { margin: 0 0 12px; font-size: 15px; }
+  .col-card ul { margin: 0; padding-left: 18px; }
+  .col-card li { font-size: 14px; margin-bottom: 8px; line-height: 1.6; }
+  .col-card strong { color: var(--ink); }
+
+  .trend-card {
+    background: var(--card);
+    border-left: 4px solid var(--accent);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .trend-card.warn { border-left-color: var(--gold); background: var(--highlight); }
+  .trend-card .h { font-weight: 700; font-size: 15px; margin-bottom: 6px; color: var(--ink); }
+  .trend-card .d { color: var(--muted); font-size: 14px; line-height: 1.65; }
+  .trend-card .d strong { color: var(--accent); }
+
+  .q-list { counter-reset: q; list-style: none; padding: 0; margin: 0; }
+  .q-list li {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 18px 14px 46px;
+    margin-bottom: 10px;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .q-list li::before {
+    counter-increment: q;
+    content: counter(q);
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    width: 22px;
+    height: 22px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 22px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .note-box {
+    background: var(--neutral);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 24px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  footer a { color: var(--muted); text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    .container { padding: 24px 16px 60px; }
+    header h1 { font-size: 21px; }
+    .hero-grid { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    .table { font-size: 13px; }
+    .table th, .table td { padding: 10px 8px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="topnav">
+    <a href="./">🏠 分享首頁</a>
+    <span class="sep">·</span>
+    <a href="./cartier-love-social-pulse.html">Cartier LOVE 社群口碑</a>
+    <span class="sep">·</span>
+    <a href="./cn-fnb-viral-campaigns-2023-2026.html">大陸餐飲爆紅事件</a>
+    <span class="sep">·</span>
+    <span style="color: var(--muted);">當前:王建民 2026 近期動態</span>
+  </nav>
+
+  <header>
+    <h1>⚾ 王建民 2026 近期動態</h1>
+    <p class="sub">「摔電話門」事件全解析 × 中信兄弟投手教練成效 × 帛琉客座 — 一份經對抗式查證的報告</p>
+    <p class="meta">整理時間:2026 / 6 / 4　·　由多源 deep-research 跨 6+ 家媒體交叉驗證,資料皆為公開報導</p>
+  </header>
+
+  <div class="hero-box">
+    <h3>🔍 一句話結論</h3>
+    <p><strong>向來內斂的王建民,在 6/2 中信兄弟落敗時罕見「怒摔牛棚電話箱門」爆紅全網 — 但這不是失控,而是他對年輕投手「期待很高」的壓力釋放;球迷、同業、廠商一片玩梗護航,風向意外溫暖。</strong></p>
+    <div class="hero-grid">
+      <div class="hero-cell">
+        <div class="label">🔥 最大話題</div>
+        <div class="val">6/2 摔電話門事件</div>
+      </div>
+      <div class="hero-cell">
+        <div class="label">📉 背景壓力</div>
+        <div class="val">兄弟開季差 · 牛棚是他的責任區</div>
+      </div>
+      <div class="hero-cell">
+        <div class="label">😄 網路風向</div>
+        <div class="val">玩梗護航 > 批評</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>① 摔電話門事件 — 來龍去脈 <span class="badge high" style="font-size:10px;">高可信度</span></h2>
+
+  <div class="topic-card">
+    <div class="title">事件經過|9 局連 3 保送,王建民罕見動怒</div>
+    <div class="meta-row">2026 / 6 / 2 · 台北大巨蛋 · 中信兄弟 3:7 統一獅</div>
+    <div class="desc">
+      <p>9 局上兄弟落後,年輕中繼<strong>盧孟揚</strong>一登板就連續保送潘傑楷、林子豪、陳聖平,形成<strong>無人出局滿壘</strong>。王建民與牛棚通話後,用力甩上牛棚電話防水箱門,巨響驚動整個休息區,畫面被轉播捕捉後在網路瘋傳。</p>
+      <p>主播陳捷盛、球評林柏佑與黃忠義都震驚直呼「<strong>很少看到他這樣</strong>」 — 球迷指出,上次他在鏡頭前動怒,已要追溯到 <strong>2006 年洋基時期</strong>被敲再見全壘打摔手套。</p>
+    </div>
+    <div class="link">🔗 <a href="https://udn.com/news/story/7001/9541878" target="_blank" rel="noopener">UDN</a> · <a href="https://www.chinatimes.com/realtimenews/20260603003951-260403" target="_blank" rel="noopener">中時</a> · <a href="https://sports.ettoday.net/news/3176714" target="_blank" rel="noopener">ETtoday</a></div>
+  </div>
+
+  <div class="topic-card">
+    <div class="title">他本人怎麼說|「門卡卡的」幽默收尾,但話講得很重</div>
+    <div class="meta-row">2026 / 6 / 3 · 賽前媒體聯訪</div>
+    <div class="desc">
+      <p>隔天受訪,王建民幽默以「<strong>門卡卡的、門太重,可能要上潤滑油</strong>」帶過,接著正色表示:</p>
+      <div class="quote">「<strong>不用跟我對不起</strong>,球場是選手自己的生涯、自己的成績。」</div>
+      <p>他澄清情緒不是針對盧孟揚個人,而是希望年輕投手在落後逆境中懂得進壘、<strong>把握每一次機會</strong>。</p>
+    </div>
+    <div class="link">🔗 <a href="https://udn.com/news/story/7001/9543831" target="_blank" rel="noopener">UDN</a> · <a href="https://sports.ettoday.net/news/3177163" target="_blank" rel="noopener">ETtoday</a></div>
+  </div>
+
+  <div class="topic-card">
+    <div class="title">各方反應|球員道歉、同業共鳴、廠商蹭一波</div>
+    <div class="meta-row">球員 · 總教練 · 對手 · 廠商 · 球迷</div>
+    <div class="desc">
+      <p><strong>盧孟揚</strong>賽前主動道歉。統一獅總教練<strong>林岳平</strong>說這是他第一次看王建民生氣,稱對方脾氣很好但對選手期待高,並自曝「<strong>我更火爆、會躲起來摔東西</strong>」。兄弟總教練平野惠一則說這代表帶隊的熱血態度。</p>
+      <p>最大的二創引爆點 — 製作該款防水箱的<strong>廠商在社群幽默回應</strong>:</p>
+      <div class="quote">「台灣之光建民葛格憤怒而摔的防水箱是我做的,<strong>箱子非常堅固,請哥用力發洩,沒問題的</strong>!」</div>
+      <p>底下網友歪樓:「原來是置入啊!」「這一摔目測球速有 140 公里!」「今天如果是恰恰,你們準備再換一個箱子。」</p>
+    </div>
+    <div class="link">🔗 <a href="https://www.nownews.com/amp/news/6842983" target="_blank" rel="noopener">NOWnews</a> · <a href="https://sports.ettoday.net/news/3176851" target="_blank" rel="noopener">ETtoday(廠商)</a></div>
+  </div>
+
+  <h2>② 投手教練成效 — 開季差,但 5 月已回穩 <span class="badge high" style="font-size:10px;">高可信度</span></h2>
+
+  <div class="two-col">
+    <div class="col-card bad">
+      <h4>🔴 開季快照(2026 / 4 上旬)</h4>
+      <ul>
+        <li>兄弟(上季全年第一)一度 <strong>1 勝 6 敗墊底</strong></li>
+        <li>4/9 團隊投手防禦率 <strong>5.29 全聯盟最弱</strong></li>
+        <li>4 月中牛棚防禦率 <strong>4.34 各隊最糟</strong>(味全龍才 1.96)</li>
+        <li>盧孟揚本季一度防禦率高達 8.44、控球出狀況</li>
+      </ul>
+    </div>
+    <div class="col-card good">
+      <h4>🟢 5 月回穩 + 培養新人</h4>
+      <ul>
+        <li>牛棚從 5.14 大幅回穩到 <strong>2.50</strong>,排名墊底爬升到<strong>第 4</strong></li>
+        <li>去年第 6 指名新秀<strong>錢可倫</strong> 4/10 升一軍,2 場 2.2 局無失分送 4 K</li>
+        <li>王建民讚其「出手留得久、打者不好判斷、不怯場」</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="trend-card warn">
+    <div class="h">⚠️ 數據時效提醒</div>
+    <div class="d"><strong>「5.29 / 4.34 全聯盟最弱」是開季 G7–G10 的早季快照</strong>,屬狀況性數據,不能拿來概括王建民整個上半季的執教成效。實際趨勢是「<strong>開季差 → 5 月明顯回穩</strong>」。看到有人只引用 5.29 來評論時,記得它是被挑選的過時數字。</div>
+  </div>
+
+  <h2>④ 其他 2026 動態 — 帛琉客座教練 <span class="badge high" style="font-size:10px;">高可信度</span></h2>
+
+  <div class="topic-card">
+    <div class="title">王建民赴帛琉,親授招牌伸卡球</div>
+    <div class="meta-row">2025 / 4 · 國立體育大學 · 透過體育署媒介</div>
+    <div class="desc">
+      <p>2025 年 4 月,王建民以中信兄弟投手教練身分受邀,<strong>親自指導帛琉棒球代表隊</strong>(備戰太平洋迷你運動會集訓),傳授握法、投球機制與其威震 MLB 的<strong>招牌伸卡球</strong>。此事有中央社(國家通訊社)一手等級來源佐證。</p>
+    </div>
+    <div class="link">🔗 <a href="https://www.cna.com.tw/news/aspt/202504280161.aspx" target="_blank" rel="noopener">中央社</a> · <a href="https://www.rti.org.tw/news/view/id/2247550" target="_blank" rel="noopener">央廣</a></div>
+  </div>
+
+  <h2>③ 紀錄片《後勁:王建民》 <span class="badge blank" style="font-size:10px;">查無資料</span></h2>
+
+  <div class="topic-card">
+    <div class="title">這個子題等於空白</div>
+    <div class="desc">
+      <p>研究跑遍 Netflix、公視、維基、Hami 等來源,<strong>沒取得任何 2026 年的可靠後續動態</strong> — 無法確認是否有重映、串流上架、海外發行、得獎或相關活動。誠實標記為未知,需另查。</p>
+    </div>
+  </div>
+
+  <h2>🔍 為什麼這份報告值得信</h2>
+
+  <div class="two-col">
+    <div class="col-card good">
+      <h4>✅ 抓出並修正了錯誤</h4>
+      <ul>
+        <li>有二手來源把投手誤植為「呂彥青 / 呂孟揚」 — 主流來源一致為<strong>盧孟揚</strong></li>
+        <li>有來源把比賽日誤標 6/3 — 實為 <strong>6/2 比賽、6/3 見報</strong></li>
+        <li>2 筆含錯誤的 claim 經對抗式驗證被駁回排除</li>
+      </ul>
+    </div>
+    <div class="col-card bad">
+      <h4>❓ 仍待釐清</h4>
+      <ul>
+        <li>事件後球團 / 中職是否有正式處置?(6/4 後發展未涵蓋)</li>
+        <li>《後勁》2026 後續完全空白</li>
+        <li>帛琉之後是否還有其他國家隊客座 / 國際交流</li>
+        <li>兄弟上半季收官完整戰績與牛棚最終排名</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="note-box">
+    📋 <strong>資料說明</strong>:本頁內容由多源 deep-research 整理,所有論點均經跨 6+ 家獨立媒體交叉驗證並通過對抗式查核。摔電話門相關報導為事件後 1–3 天(2026/6/2–6/3)的即時新聞,後續發酵未涵蓋。資料皆為公開報導,僅作資訊整理參考,不代表任何球團或當事人立場。
+  </div>
+
+  <footer>
+    <p>來源:UDN、自由體育、中時、ETtoday、NOWnews、Yahoo 運動、中央社、央廣 等</p>
+    <p>由 Claude 整理 · 可自由分享 · 2026 / 6 / 4</p>
+    <p><a href="./">← 回到分享首頁</a></p>
+  </footer>
+</div>
+</body>
+</html>
