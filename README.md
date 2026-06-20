@@ -14,6 +14,7 @@ Tony 的分享頁面集（由 Claude 自動維護）。
 - 💎 [Cartier LOVE — 近兩年媒體曝光與品牌策略觀察](https://tonyace126.github.io/my-shares/cartier-love-media-buzz.html)
 - 🎬 [EP3 場記表（現場即時記錄互動工具）](https://tonyace126.github.io/my-shares/ep3-shooting-log.html)
 - ⚾ [王建民 2026 近期動態 — 摔電話門事件 × 中信兄弟教練成效（經交叉驗證）](https://tonyace126.github.io/my-shares/chien-ming-wang-2026-news.html)
+- 🚗 [台灣車市這一週新車上市與媒體報導（6/14–6/20）— RAV4 PHEV 主角](https://tonyace126.github.io/my-shares/2026-06-tw-new-car-launches.html)
 
 每次更新由 Claude 直接 git push，GitHub Pages 約 1 分鐘自動上線。
 
